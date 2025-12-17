@@ -1,2 +1,2 @@
 # cosmos-link.github.io
-Docs
+Docs visible at: https://cosmos-link.github.io/{filename}
