@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宇酷通数字生命体平台 - 应用中心</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <!-- 科技感装饰线条 -->
+    <div class="tech-lines">
+        <div class="line line-top-left"></div>
+        <div class="line line-top-right"></div>
+    </div>
+
+    <div class="container">
+        <!-- 顶部操作栏 -->
+        <div class="header">
+            <button class="btn-logout" id="logoutBtn">退出</button>
+            <button class="btn-profile" id="profileBtn">我的</button>
+        </div>
+
+        <!-- 企业信息 -->
+        <div class="company-info">
+            <div class="company-name">
+                企业名称：<span id="companyName">************有限公司</span>
+            </div>
+        </div>
+
+        <!-- 行业分类标签 -->
+        <div class="industry-tabs">
+            <button class="industry-tab active" data-industry="industrial">工业</button>
+            <button class="industry-tab" data-industry="finance">金融</button>
+            <button class="industry-tab" data-industry="education">教育</button>
+            <button class="industry-tab" data-industry="other">其他</button>
+        </div>
+
+        <!-- 应用网格 -->
+        <div class="app-grid">
+            <!-- 第一行 -->
+            <div class="app-card featured">
+                <div class="app-icon">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M32 8L8 20V44L32 56L56 44V20L32 8Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M32 8V32M32 32L8 20M32 32L56 20M32 32V56" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="app-name">数据采集器</div>
+                <div class="badge">1</div>
+            </div>
+
+            <div class="app-card featured active">
+                <div class="app-icon">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="12" y="12" width="40" height="40" rx="4" stroke="currentColor" stroke-width="2"/>
+                        <line x1="20" y1="24" x2="44" y2="24" stroke="currentColor" stroke-width="2"/>
+                        <line x1="20" y1="32" x2="44" y2="32" stroke="currentColor" stroke-width="2"/>
+                        <line x1="20" y1="40" x2="44" y2="40" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="app-name">上链数据</div>
+                <div class="badge">2</div>
+            </div>
+
+            <div class="app-card featured">
+                <div class="app-icon">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="16" y="12" width="32" height="40" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <line x1="24" y1="20" x2="40" y2="20" stroke="currentColor" stroke-width="2"/>
+                        <line x1="24" y1="28" x2="40" y2="28" stroke="currentColor" stroke-width="2"/>
+                        <line x1="24" y1="36" x2="40" y2="36" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="app-name">算力中心</div>
+                <div class="badge">3</div>
+            </div>
+
+            <div class="app-card featured">
+                <div class="app-icon">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="32" cy="32" r="20" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="32" cy="32" r="4" fill="currentColor"/>
+                        <path d="M32 12V32L44 26" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="app-name">web4.0直播</div>
+            </div>
+
+            <!-- 第二行 -->
+            <div class="app-card">
+                <div class="app-name">应用名称5</div>
+            </div>
+            <div class="app-card">
+                <div class="app-name">应用名称6</div>
+            </div>
+            <div class="app-card">
+                <div class="app-name">应用名称7</div>
+            </div>
+            <div class="app-card">
+                <div class="app-name">应用名称8</div>
+            </div>
+
+            <!-- 第三行 -->
+            <div class="app-card">
+                <div class="app-name">应用名称9</div>
+            </div>
+            <div class="app-card">
+                <div class="app-name">应用名称10</div>
+            </div>
+            <div class="app-card">
+                <div class="app-name">应用名称11</div>
+            </div>
+            <div class="app-card light">
+                <div class="app-name">应用名称12</div>
+            </div>
+
+            <!-- 第四行 -->
+            <div class="app-card">
+                <div class="app-name">应用名称13</div>
+            </div>
+            <div class="app-card light">
+                <div class="app-name">应用名称14</div>
+            </div>
+            <div class="app-card light">
+                <div class="app-name">应用名称15</div>
+            </div>
+            <div class="app-card">
+                <div class="app-name">应用名称16</div>
+            </div>
+        </div>
+
+        <!-- 底部指示器 -->
+        <div class="pagination">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

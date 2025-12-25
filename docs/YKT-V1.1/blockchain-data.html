@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上链数据 - 宇酷通数字生命体平台</title>
+    <link rel="stylesheet" href="blockchain-data.css">
+</head>
+<body>
+    <!-- 科技感装饰线条 -->
+    <div class="tech-lines">
+        <div class="line line-top-left"></div>
+        <div class="line line-top-right"></div>
+    </div>
+
+    <div class="container">
+        <!-- 退出按钮 -->
+        <div class="header-actions">
+            <button class="btn-exit" id="exitBtn">退出</button>
+        </div>
+
+        <!-- 顶部标题 -->
+        <div class="header-title">
+            <h1>工厂信息（工厂名称·区域位置·设备总数量）</h1>
+        </div>
+
+        <!-- 搜索区域 -->
+        <div class="search-section">
+            <label for="deviceName">设备名称</label>
+            <input type="text" id="deviceName" placeholder="请输入设备名称">
+            <button class="btn-search" id="searchBtn">搜索</button>
+            <button class="btn-cancel" id="cancelBtn">取消</button>
+        </div>
+
+        <!-- 设备类型标签 -->
+        <div class="device-type-tabs">
+            <button class="device-type-tab active" data-type="1">设备类型1</button>
+            <button class="device-type-tab" data-type="2">设备类型2</button>
+            <button class="device-type-tab" data-type="3">设备类型3</button>
+            <button class="device-type-tab" data-type="4">设备类型4</button>
+        </div>
+
+        <!-- 设备卡片网格 -->
+        <div class="device-grid" id="deviceGrid">
+            <!-- 设备卡片将由JavaScript动态生成 -->
+        </div>
+
+        <!-- 返回按钮 -->
+        <div class="back-button-container">
+            <button class="btn-back" id="backBtn">返回</button>
+        </div>
+    </div>
+
+    <!-- 区块链详情弹窗 -->
+    <div class="modal" id="blockchainModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>区块链存证详细信息</h2>
+                <button class="btn-close" id="closeModal">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-section">
+                    <h3>区块信息:</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">区块高度:</span>
+                        <span class="detail-value" id="blockHeight">#1234567</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">区块时间:</span>
+                        <span class="detail-value" id="blockTime">2025-12-23 10:23:55</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">交易哈希:</span>
+                        <span class="detail-value hash" id="txHash">0x7a3f9b1c8d5e2f4a6b9c0d3e7f2a5b8c9d0e1f2</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">智能合约:</span>
+                        <span class="detail-value" id="contract">设备数据存证合约v1.2</span>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-item">
+                        <span class="detail-label">智能合约:</span>
+                        <span class="detail-value" id="contractName">设备数据存证合约v1.2</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">燃气消耗:</span>
+                        <span class="detail-value" id="gasUsed">45,678 Gwei</span>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3 class="verification-title">数据指纹验证:</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">原始数据哈希:</span>
+                        <span class="detail-value hash" id="originalHash">SHA256: a1b2c3d4e5f6...</span>
+                    </div>
+                    <div class="detail-item verification-item">
+                        <span class="detail-label">链上存储哈希:</span>
+                        <span class="detail-value hash" id="chainHash">SHA256: a1b2c3d4e5f6...</span>
+                        <span class="verification-badge success">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            匹配
+                        </span>
+                    </div>
+                    <div class="detail-item verification-item">
+                        <span class="detail-label">时间戳验证:</span>
+                        <span class="verification-badge success">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            连续无间断
+                        </span>
+                    </div>
+                    <div class="detail-item verification-item">
+                        <span class="detail-label">签名验证:</span>
+                        <span class="verification-badge success">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            设备签名有效
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="blockchain-data.js"></script>
+</body>
+</html>

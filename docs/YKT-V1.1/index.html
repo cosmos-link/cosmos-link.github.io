@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宇酷通数字生命体平台 - 登录</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 国家选择 -->
+        <div class="country-selector">
+            <label for="country">国家:</label>
+            <select id="country">
+                <option value="中国" selected>中国</option>
+                <option value="美国">美国</option>
+                <option value="日本">日本</option>
+            </select>
+        </div>
+
+        <!-- 登录卡片 -->
+        <div class="login-card">
+            <!-- Logo -->
+            <div class="logo-container">
+                <div class="logo">LOGO</div>
+            </div>
+
+            <!-- 标题 -->
+            <h1 class="title">宇酷通数字生命体平台</h1>
+
+            <!-- 用户类型标签 -->
+            <div class="tabs">
+                <button class="tab active" data-type="enterprise">企业用户</button>
+                <button class="tab" data-type="institution">机构用户</button>
+            </div>
+
+            <!-- 登录表单 -->
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="did">DID账号:</label>
+                    <input 
+                        type="text" 
+                        id="did" 
+                        placeholder="请输入DID账号"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="login-btn">
+                    登录
+                </button>
+
+                <!-- 底部链接 -->
+                <div class="footer-links">
+                    <a href="#register">注册DID</a>
+                    <a href="#recover">助记词恢复</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
