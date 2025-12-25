@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>数据采集器 - 宇酷通数字生命体平台</title>
+    <link rel="stylesheet" href="common.css">
     <link rel="stylesheet" href="data-collector.css">
 </head>
 <body>
@@ -15,10 +16,17 @@
     </div>
 
     <div class="container">
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <span class="breadcrumb-item">应用中心</span>
+            <span class="breadcrumb-separator">></span>
+            <span class="breadcrumb-item active">数据采集器</span>
+        </div>
+
         <!-- 头部信息栏 -->
         <div class="header">
             <div class="company-info">
-                <h2 class="company-title">企业名称：<span>************有限公司</span></h2>
+                <h2 class="company-title">工厂名称：<span>***有限公司</span></h2>
                 <div class="stats">
                     <div class="stat-item">
                         <span class="stat-label">总设备数:</span>
@@ -29,16 +37,17 @@
                         <span class="stat-value">98%</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">故障率:</span>
+                        <span class="stat-label">设备正常率:</span>
                         <span class="stat-value">97%</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">存在完整率:</span>
+                        <span class="stat-label">数据完整率:</span>
                         <span class="stat-value">100%</span>
                     </div>
                 </div>
             </div>
             <div class="header-actions">
+                <button class="btn-export" id="exportBtn">导出数据</button>
                 <button class="btn-settings" id="settingsBtn">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" stroke-width="2"/>
@@ -57,9 +66,9 @@
                 
                 <!-- 参数标签 -->
                 <div class="param-tabs">
-                    <button class="param-tab active">温度</button>
-                    <button class="param-tab">压力</button>
-                    <button class="param-tab">转速模块</button>
+                    <button class="param-tab active">温度监控</button>
+                    <button class="param-tab">压力检测</button>
+                    <button class="param-tab">转速监控</button>
                 </div>
 
                 <!-- 仪表盘 -->
@@ -145,28 +154,28 @@
                         <div class="chart-legend">
                             <div class="legend-item">
                                 <span class="legend-dot" style="background: #BBDEFB;"></span>
-                                <span class="legend-label">设备类型1</span>
+                                <span class="legend-label">传感设备</span>
                                 <span class="legend-value">6%</span>
                             </div>
                             <div class="legend-item">
                                 <span class="legend-dot" style="background: #90CAF9;"></span>
-                                <span class="legend-label">设备类型2</span>
+                                <span class="legend-label">生产设备</span>
                                 <span class="legend-value">38%</span>
                             </div>
                             <div class="legend-item">
                                 <span class="legend-dot" style="background: #64B5F6;"></span>
-                                <span class="legend-label">设备类型3</span>
+                                <span class="legend-label">检测设备</span>
                                 <span class="legend-value">10%</span>
                             </div>
                             <div class="legend-item">
                                 <span class="legend-dot" style="background: #4A90E2;"></span>
-                                <span class="legend-label">设备类型4</span>
+                                <span class="legend-label">控制设备</span>
                                 <span class="legend-value">28%</span>
                             </div>
                             <div class="legend-item">
                                 <span class="legend-dot" style="background: #2196F3;"></span>
-                                <span class="legend-label">设备类型点</span>
-                                <span class="legend-value">20%</span>
+                                <span class="legend-label">辅助设备</span>
+                                <span class="legend-value">18%</span>
                             </div>
                         </div>
                     </div>
@@ -195,26 +204,26 @@
                                 <tr class="alert-row critical">
                                     <td>1</td>
                                     <td>G100023</td>
-                                    <td></td>
+                                    <td>高温告警</td>
                                     <td>设备温度过高</td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>生产线01</td>
+                                    <td>12:15</td>
                                 </tr>
-                                <tr class="alert-row">
+                                <tr class="alert-row warning">
                                     <td>2</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>G100024</td>
+                                    <td>压力异常</td>
+                                    <td>系统压力不稳</td>
+                                    <td>生产线02</td>
+                                    <td>11:45</td>
                                 </tr>
                                 <tr class="alert-row">
                                     <td>3</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>G100025</td>
+                                    <td>通讯异常</td>
+                                    <td>设备连接中断</td>
+                                    <td>仓库区</td>
+                                    <td>10:30</td>
                                 </tr>
                                 <tr class="alert-row">
                                     <td>4</td>

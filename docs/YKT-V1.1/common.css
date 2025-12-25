@@ -1,0 +1,88 @@
+/* 公共面包屑导航样式 */
+.breadcrumb {
+    padding: 10px 0;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #64B5F6;
+}
+
+.breadcrumb-item {
+    color: #90CAF9;
+}
+
+.breadcrumb-item.active {
+    color: #2196F3;
+    font-weight: 500;
+}
+
+.breadcrumb-separator {
+    margin: 0 8px;
+    color: #64B5F6;
+}
+
+/* 新增按钮样式 */
+.btn-refresh,
+.btn-help,
+.btn-verify,
+.btn-download,
+.btn-earnings,
+.btn-export {
+    background: linear-gradient(135deg, #1976D2, #2196F3);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    margin: 0 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.btn-refresh:hover,
+.btn-help:hover,
+.btn-verify:hover,
+.btn-download:hover,
+.btn-earnings:hover,
+.btn-export:hover {
+    background: linear-gradient(135deg, #1565C0, #1976D2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+}
+
+/* 告警行样式增强 */
+.alert-row.warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-left: 4px solid #FFC107;
+}
+
+.alert-row.critical {
+    background-color: rgba(244, 67, 54, 0.1);
+    border-left: 4px solid #F44336;
+}
+
+/* 企业信息显示优化 */
+.company-info {
+    background: rgba(33, 150, 243, 0.1);
+    border: 1px solid rgba(33, 150, 243, 0.2);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .breadcrumb {
+        font-size: 12px;
+    }
+    
+    .btn-refresh,
+    .btn-help,
+    .btn-verify,
+    .btn-download,
+    .btn-earnings,
+    .btn-export {
+        padding: 6px 12px;
+        font-size: 12px;
+        margin: 2px;
+    }
+}

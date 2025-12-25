@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>算力中心 - 宇酷通数字生命体平台</title>
+    <link rel="stylesheet" href="common.css">
     <link rel="stylesheet" href="computing-power.css">
 </head>
 <body>
@@ -13,8 +14,17 @@
     </div>
 
     <div class="container">
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <span class="breadcrumb-item">应用中心</span>
+            <span class="breadcrumb-separator">></span>
+            <span class="breadcrumb-item active">算力中心</span>
+        </div>
+
         <!-- 退出按钮 -->
         <div class="header-actions">
+            <button class="btn-earnings" id="earningsBtn">收益查看</button>
+            <button class="btn-earnings" id="settingsBtn">算力设置</button>
             <button class="btn-exit" id="exitBtn">退出</button>
         </div>
 
@@ -33,10 +43,10 @@
 
         <!-- 设备类型标签 -->
         <div class="device-type-tabs">
-            <button class="device-type-tab active" data-type="1">设备类型1</button>
-            <button class="device-type-tab" data-type="2">设备类型2</button>
-            <button class="device-type-tab" data-type="3">设备类型3</button>
-            <button class="device-type-tab" data-type="4">设备类型4</button>
+            <button class="device-type-tab active" data-type="1">高算力设备</button>
+            <button class="device-type-tab" data-type="2">GPU计算卡</button>
+            <button class="device-type-tab" data-type="3">存储设备</button>
+            <button class="device-type-tab" data-type="4">网络设备</button>
         </div>
 
         <!-- 设备卡片网格 -->

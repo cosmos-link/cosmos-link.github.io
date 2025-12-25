@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>上链数据 - 宇酷通数字生命体平台</title>
+    <link rel="stylesheet" href="common.css">
     <link rel="stylesheet" href="blockchain-data.css">
 </head>
 <body>
@@ -14,8 +15,17 @@
     </div>
 
     <div class="container">
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <span class="breadcrumb-item">应用中心</span>
+            <span class="breadcrumb-separator">></span>
+            <span class="breadcrumb-item active">上链数据</span>
+        </div>
+
         <!-- 退出按钮 -->
         <div class="header-actions">
+            <button class="btn-verify" id="verifyBtn">验证数据</button>
+            <button class="btn-download" id="downloadBtn">下载证书</button>
             <button class="btn-exit" id="exitBtn">退出</button>
         </div>
 
@@ -34,10 +44,10 @@
 
         <!-- 设备类型标签 -->
         <div class="device-type-tabs">
-            <button class="device-type-tab active" data-type="1">设备类型1</button>
-            <button class="device-type-tab" data-type="2">设备类型2</button>
-            <button class="device-type-tab" data-type="3">设备类型3</button>
-            <button class="device-type-tab" data-type="4">设备类型4</button>
+            <button class="device-type-tab active" data-type="1">生产设备</button>
+            <button class="device-type-tab" data-type="2">传感设备</button>
+            <button class="device-type-tab" data-type="3">检测设备</button>
+            <button class="device-type-tab" data-type="4">控制设备</button>
         </div>
 
         <!-- 设备卡片网格 -->
