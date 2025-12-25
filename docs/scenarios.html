@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宇酷通：全产业链消费投资闭环操作手册</title>
+    <style>
+        :root {
+            --primary: #10b981;
+            --secondary: #3b82f6;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+        }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; line-height: 1.6; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px; background-color: #f8fafc; }
+        
+        /* 标题样式：白色背景 + 底部绿线 */
+        header { text-align: center; padding: 40px 0; background: white; margin-bottom: 30px; }
+        header h1 { margin: 0; font-size: 2.4em; color: var(--dark); border-bottom: 4px solid var(--primary); display: inline-block; padding-bottom: 10px; }
+        header p { color: #64748b; margin-top: 15px; font-size: 1.1em; }
+        
+        h2 { color: var(--dark); margin-top: 40px; background: white; padding: 15px; border-radius: 8px; border-left: 8px solid var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        
+        .role-tag { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; font-weight: bold; color: white; margin-bottom: 5px; }
+        .supplier { background: #ef4444; }
+        .factory { background: #f59e0b; }
+        .ops { background: #3b82f6; }
+        .store { background: #8b5cf6; }
+        .platform { background: #64748b; }
+        .customer { background: #10b981; }
+
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        th, td { padding: 15px; text-align: left; border: 1px solid var(--border); vertical-align: top; }
+        th { background-color: #f8fafc; color: #475569; font-weight: 700; }
+        
+        .step-num { font-weight: bold; color: var(--primary); font-size: 1.1em; margin-right: 5px; }
+
+        /* 场景拓展样式 */
+        .ext-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+        .ext-item { background: white; padding: 20px; border-radius: 12px; border-top: 5px solid var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; }
+        .ext-item:hover { transform: translateY(-5px); }
+        .ext-item strong { display: block; margin-bottom: 10px; color: var(--dark); font-size: 1.1em; }
+        .ext-item p { font-size: 0.92em; color: #4b5563; margin: 0; }
+
+        .footer { text-align: center; margin-top: 60px; padding: 30px; color: #94a3b8; font-size: 0.9em; border-top: 1px solid var(--border); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>宇酷通 (LowCarbToken) 全产业链闭环手册</h1>
+        <p>确权 · 调度 · 消费 · 投资 · 自动补货</p>
+    </header>
+
+    <h2>一、 基础设施与角色准入</h2>
+    <table>
+        <thead>
+            <tr><th>执行方</th><th>步骤</th><th>业务操作</th><th>技术实现与数据存证</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="role-tag platform">宇酷通中台</span></td>
+                <td><span class="step-num">1.1</span></td>
+                <td>合约部署与初始化</td>
+                <td>部署 <code>LowCarbNFTToken</code> 合约，配置 <code>OWNER_ROLE</code> 管理员。</td>
+            </tr>
+            <tr>
+                <td><span class="role-tag platform">宇酷通中台</span></td>
+                <td><span class="step-num">1.2</span></td>
+                <td>角色权限分发</td>
+                <td>为供应商/工厂授权 <code>ISSUER</code>；为运营中心/门店授权 <code>CARRIER</code>。</td>
+            </tr>
+            <tr>
+                <td><span class="role-tag platform">宇酷通中台</span></td>
+                <td><span class="step-num">1.3</span></td>
+                <td>合规名单激活</td>
+                <td>调用 <code>setTransferCompliance</code>，将参与各方加入链上白名单。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>二、 供应与生产阶段 (上游溯源)</h2>
+    <table>
+        <thead>
+            <tr><th>执行方</th><th>步骤</th><th>业务操作</th><th>技术实现与数据存证</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="role-tag supplier">原材料商</span></td>
+                <td><span class="step-num">2.1</span></td>
+                <td>原料资产发行</td>
+                <td>调用 <code>mintAssetToken</code>。存证：原料 UID、产地证明、供应商执照。</td>
+            </tr>
+            <tr>
+                <td><span class="role-tag ops">运营中心</span></td>
+                <td><span class="step-num">2.2</span></td>
+                <td>原料进厂物流</td>
+                <td>调用 <code>transferFromCarrier</code>。实现原料 Token 从供应商到工厂的流转。</td>
+            </tr>
+            <tr>
+                <td><span class="role-tag factory">工厂/农场</span></td>
+                <td><span class="step-num">2.3</span></td>
+                <td>成品铸造(权益穿透)</td>
+                <td>调用 <code>burn</code> 核销原料 Token，生成成品 Token 并关联原始原料哈希。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>三、 运营配送与首次上架</h2>
+    
+    <table>
+        <thead>
+            <tr><th>执行方</th><th>步骤</th><th>业务操作</th><th>技术实现与数据存证</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="role-tag factory">工厂/农场</span></td>
+                <td><span class="step-num">3.1</span></td>
+                <td>生产完工待拨</td>
+                <td>在中台登记商品 UID 状态为“待配送”。</td>
+            </tr>
+            <tr>
+                <td><span class="role-tag ops">运营中心</span></td>
+                <td><span class="step-num">3.2</span></td>
+                <td>物流配送执行</td>
+                <td>执行 <code>transferFromCarrier</code>。货权流转：工厂 ➔ 运营中心 ➔ 实体店。</td>
+            </tr>
+            <tr>
+                <td><span class="role-tag store">实体店</span></td>
+                <td><span class="step-num">3.3</span></td>
+                <td>到货确认上架</td>
+                <td>Token 转入店端钱包，前端系统同步更新库存。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>四、 智能监测与自动补货 (调度核心)</h2>
+    <div style="background: #ecfdf5; border: 1px solid #10b981; padding: 15px; border-radius: 8px; margin-bottom: 10px; color: #065f46; font-size: 0.95em;">
+        <strong>自动调度逻辑：</strong> 中台持续监控门店 <code>BalanceOf</code> 状态。一旦触发预设阈值，系统自动下达跨库调拨指令。
+    </div>
+    <table>
+        <thead>
+            <tr><th>执行方</th><th>步骤</th><th>业务操作</th><th>技术实现与数据存证</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="role-tag platform">宇酷通中台</span></td>
+                <td><span class="step-num">4.1</span></td>
+                <td>库存监测预警</td>
+                <td>后端监听门店 Token 余额。若 < 阈值，自动生成补货指令。</td>
+            </tr>
+            <tr>
+                <td><span class="role-tag ops">运营中心</span></td>
+                <td><span class="step-num">4.2</span></td>
+                <td>调度指令执行</td>
+                <td>调用 <code>transferFromCarrier</code> 将工厂/总库 Token 转至目标门店。</td>
+            </tr>
+            <tr>
+                <td><span class="role-tag ops">运营中心</span></td>
+                <td><span class="step-num">4.3</span></td>
+                <td>物理货运补给</td>
+                <td>货物送达并扫码，确保 Token 账本与物理实物同步。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>五、 消费即投资与权益返还</h2>
+    <table>
+        <thead>
+            <tr><th>执行方</th><th>步骤</th><th>业务操作</th><th>技术实现与数据存证</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="role-tag customer">消费者</span></td>
+                <td><span class="step-num">5.1</span></td>
+                <td>扫码购买</td>
+                <td>支付成功触发 <code>transferFromCarrier</code>。Token：实体店 ➔ 消费者。</td>
+            </tr>
+            <tr>
+                <td><span class="role-tag platform">宇酷通中台</span></td>
+                <td><span class="step-num">5.2</span></td>
+                <td>权益权重分配</td>
+                <td>基于 UID 链路计算收益，实现通证持有者的资产性回报。</td>
+            </tr>
+            <tr>
+                <td><span class="role-tag customer">消费者</span></td>
+                <td><span class="step-num">5.3</span></td>
+                <td>复购抵扣核销</td>
+                <td>使用返还权益复购，Token 回流至机构并完成链上核销记录。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>六、 场景拓展 (Scenario Extension)</h2>
+    <div class="ext-grid">
+        <div class="ext-item">
+            <strong>⚡ 闲置算力共享</strong>
+            <p>利用工厂闲置机器资源搭建分布式集群，通过确权算力资产获得收益，实现硬件资源的价值置换。</p>
+        </div>
+        <div class="ext-item">
+            <strong>🏦 金融与保险场景</strong>
+            <p>基于链上全链路背调。支持通证质押贷款，以及针对生产损耗、物流风险定制的区块链保险。</p>
+        </div>
+        <div class="ext-item">
+            <strong>🏡 农村场景</strong>
+            <p>融合文旅(吃住玩)与传统服饰(衣)。通过农场、孝道文化、地域品牌，以通证经济吸引人才回流。</p>
+            <p>村民可凭通证积分去城市学习、参与技能培训，提升专业度。</p>
+        </div>
+        <div class="ext-item">
+            <strong>🏙️ 城市场景</strong>
+            <p>建立城乡对口支援路径，鼓励市民通过通证去农村消费（农家乐、农产采摘）。</p>
+        </div>
+        <div class="ext-item">
+            <strong>🏛️ 政策补贴场景</strong>
+            <p>利用记录的真实碳足迹与产值数据，协助企业在线提供链上证明，一键申请精准的政务补贴。</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2025 宇酷通 (YKT) | LowCarbToken 全产业链技术实施标准</p>
+    </div>
+
+</body>
+</html>
