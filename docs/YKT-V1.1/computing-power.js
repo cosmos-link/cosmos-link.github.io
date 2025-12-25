@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 初始化设备列表
     generateDeviceCards();
+    
+    // 启动定时更新算力数据
+    startDynamicUpdate();
 
     // 设备类型标签切换
     const deviceTypeTabs = document.querySelectorAll('.device-type-tab');
@@ -140,3 +143,58 @@ function searchDevices(keyword) {
     // 这里可以添加搜索逻辑
     alert('搜索功能开发中...\n关键词: ' + keyword);
 }
+
+// 启动动态更新
+let updateInterval = null;
+
+function startDynamicUpdate() {
+    // 每2秒更新一次所有设备的算力数据
+    updateInterval = setInterval(function() {
+        updateAllDevicePower();
+    }, 2000);
+}
+
+// 更新所有设备的算力数据
+function updateAllDevicePower() {
+    const deviceCards = document.querySelectorAll('.device-card');
+    
+    deviceCards.forEach(card => {
+        const usedElement = card.querySelector('.power-value.used');
+        const remainingElement = card.querySelector('.power-value.remaining');
+        
+        if (usedElement && remainingElement) {
+            // 获取当前值
+            const currentUsed = parseInt(usedElement.textContent);
+            const currentRemaining = parseInt(remainingElement.textContent);
+            
+            // 生成新的算力值（在当前值附近小幅波动）
+            const usedChange = Math.floor(Math.random() * 200) - 100; // -100到+100的变化
+            const remainingChange = Math.floor(Math.random() * 20) - 10; // -10到+10的变化
+            
+            let newUsed = currentUsed + usedChange;
+            let newRemaining = currentRemaining + remainingChange;
+            
+            // 限制范围
+            newUsed = Math.max(1000, Math.min(5000, newUsed));
+            newRemaining = Math.max(30, Math.min(300, newRemaining));
+            
+            // 更新显示
+            usedElement.textContent = newUsed + 'H/s';
+            remainingElement.textContent = newRemaining + 'H/s';
+            
+            // 添加更新动画效果
+            usedElement.style.transition = 'color 0.3s ease';
+            usedElement.style.color = '#FF5722';
+            setTimeout(() => {
+                usedElement.style.color = '#FF9800';
+            }, 300);
+        }
+    });
+}
+
+// 清理定时器
+window.addEventListener('beforeunload', function() {
+    if (updateInterval) {
+        clearInterval(updateInterval);
+    }
+});
