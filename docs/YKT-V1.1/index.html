@@ -10,11 +10,11 @@
     <div class="container">
         <!-- 国家选择 -->
         <div class="country-selector">
-            <label for="country">国家:</label>
+            <label for="country" data-i18n="country-label">国家:</label>
             <select id="country">
-                <option value="中国" selected>中国</option>
-                <option value="美国">美国</option>
-                <option value="日本">日本</option>
+                <option value="zh-CN" selected data-i18n="china">中国</option>
+                <option value="en-US" data-i18n="usa">美国</option>
+                <option value="ja-JP" data-i18n="japan">日本</option>
             </select>
         </div>
 
@@ -22,43 +22,47 @@
         <div class="login-card">
             <!-- Logo -->
             <div class="logo-container">
-                <div class="logo">LOGO</div>
+                <img src="ykt-icon.png" alt="YKT Logo" class="logo">
             </div>
 
             <!-- 标题 -->
-            <h1 class="title">宇酷通数字生命体平台</h1>
+            <h1 class="title" data-i18n="platform-title">宇酷通数字生命体平台</h1>
 
             <!-- 用户类型标签 -->
             <div class="tabs">
-                <button class="tab active" data-type="enterprise">企业客户</button>
-                <button class="tab" data-type="institution">政府机构</button>
+                <button class="tab active" data-type="enterprise" data-i18n="enterprise-user">企业</button>
+                <button class="tab" data-type="government" data-i18n="government-user">机构</button>
+                <button class="tab" data-type="individual" data-i18n="individual-user">个人</button>
+                <button class="tab" data-type="community" data-i18n="community-user">社区</button>
             </div>
 
             <!-- 登录表单 -->
             <form class="login-form" id="loginForm">
                 <div class="form-group">
-                    <label for="did">DID账号:</label>
+                    <label for="did" data-i18n="did-account">DID账号:</label>
                     <input 
                         type="text" 
                         id="did" 
+                        data-i18n-placeholder="did-placeholder"
                         placeholder="请输入DID账号"
                         required
                     >
                 </div>
 
-                <button type="submit" class="login-btn">
+                <button type="submit" class="login-btn" data-i18n="login-btn">
                     登录
                 </button>
 
                 <!-- 底部链接 -->
                 <div class="footer-links">
-                    <a href="#register">创建DID身份</a>
-                    <a href="#recover">恢复DID账户</a>
+                    <a href="#register" data-i18n="create-did">创建DID身份</a>
+                    <a href="#recover" data-i18n="recover-did">恢复DID账户</a>
                 </div>
             </form>
         </div>
     </div>
 
+    <script src="i18n.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

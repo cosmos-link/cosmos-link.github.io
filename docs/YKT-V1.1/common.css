@@ -6,6 +6,17 @@
     color: #64B5F6;
 }
 
+/* Logo样式 */
+.logo {
+    width: 80px;
+    height: auto;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
 .breadcrumb-item {
     color: #90CAF9;
 }
@@ -67,6 +78,24 @@
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 20px;
+}
+
+/* 英文版本标签间距优化 */
+body.lang-en-US .tabs {
+    gap: 2px;
+}
+
+body.lang-en-US .tab {
+    padding: 6px 4px;
+    margin: 0 1px;
+    font-size: 11px;
+    min-width: auto;
+    max-width: 23.5%;
+    flex: 1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 /* 响应式设计 */

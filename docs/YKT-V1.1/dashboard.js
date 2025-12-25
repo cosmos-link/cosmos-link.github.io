@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // 显示企业信息
     if (loginData.userType === '企业用户') {
         const companyNameElement = document.getElementById('companyName');
-        // 这里可以根据实际需求显示真实的企业名称
-        companyNameElement.textContent = '************有限公司';
+        // 这里可以根据实际需求显示真实的工厂名称
+        companyNameElement.textContent = '***有限公司';
     }
 
     // 行业标签切换
