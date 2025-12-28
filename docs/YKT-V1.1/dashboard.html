@@ -139,6 +139,122 @@
         </div>
     </div>
 
+    <!-- 钱包浮层 -->
+    <div class="wallet-overlay" id="walletOverlay">
+        <div class="wallet-popup">
+            <div class="wallet-header">
+                <div class="user-info">
+                    <div class="user-avatar">头像</div>
+                    <div class="user-details">
+                        <div class="user-name">张三</div>
+                        <div class="user-position">工厂管理</div>
+                    </div>
+                </div>
+                <button class="wallet-close" id="walletClose">×</button>
+            </div>
+            
+            <div class="wallet-balance">
+                <div class="balance-icon">¥</div>
+                <div class="balance-info">
+                    <div class="balance-label">钱包余额</div>
+                    <div class="balance-amount">
+                        0 
+                        <span class="currency-selector" id="currencySelector">
+                            YKT-CNY
+                            <svg class="dropdown-arrow" viewBox="0 0 12 8" fill="none">
+                                <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="wallet-actions">
+                <button class="wallet-btn" id="transferBtn">转账</button>
+                <button class="wallet-btn" id="withdrawBtn">提现</button>
+                <button class="wallet-btn" id="exchangeBtn">兑换</button>
+            </div>
+            
+            <div class="transaction-section">
+                <div class="section-header">
+                    <span class="section-title">交易明细</span>
+                    <span class="section-more">最近一天></span>
+                </div>
+                <div class="transaction-list">
+                    <div class="transaction-item">
+                        <div class="transaction-icon withdraw">💰</div>
+                        <div class="transaction-details">
+                            <div class="transaction-type">提现记录</div>
+                            <div class="transaction-date">2023-02-22 12:11:11</div>
+                        </div>
+                        <div class="transaction-amount negative">-105.00元</div>
+                    </div>
+                    <div class="transaction-item">
+                        <div class="transaction-icon reward">🎁</div>
+                        <div class="transaction-details">
+                            <div class="transaction-type">获得奖励</div>
+                            <div class="transaction-date">2023-02-22 12:11:11</div>
+                        </div>
+                        <div class="transaction-amount positive">+105.00元</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 币种选择下拉 -->
+        <div class="currency-dropdown" id="currencyDropdown">
+            <div class="currency-option" data-currency="YKT-CNY">YKT-CNY</div>
+            <div class="currency-option" data-currency="YKT-JL">YKT-JL</div>
+            <div class="currency-option" data-currency="YKT-ZL">YKT-ZL</div>
+        </div>
+    </div>
+
+    <!-- 兑换浮层 -->
+    <div class="exchange-overlay" id="exchangeOverlay">
+        <div class="exchange-popup">
+            <div class="exchange-header">
+                <h3>币种兑换</h3>
+                <button class="exchange-close" id="exchangeClose">×</button>
+            </div>
+            
+            <div class="exchange-content">
+                <div class="exchange-section">
+                    <label>从</label>
+                    <div class="exchange-input-group">
+                        <input type="number" class="exchange-amount" id="fromAmountExchange" placeholder="0" value="0">
+                        <select class="exchange-currency" id="fromCurrencyExchange">
+                            <option value="YKT-CNY">YKT-CNY</option>
+                            <option value="YKT-JL">YKT-JL</option>
+                            <option value="YKT-ZL">YKT-ZL</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="exchange-arrow">
+                    ↓
+                </div>
+                
+                <div class="exchange-section">
+                    <label>到</label>
+                    <div class="exchange-input-group">
+                        <input type="number" class="exchange-amount" id="toAmountExchange" placeholder="0" value="0" readonly>
+                        <select class="exchange-currency" id="toCurrencyExchange">
+                            <option value="YKT-CNY">YKT-CNY</option>
+                            <option value="YKT-JL">YKT-JL</option>
+                            <option value="YKT-ZL">YKT-ZL</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="exchange-rate">
+                    <span id="exchangeRateText">汇率: 1 YKT-CNY = 1.2 YKT-JL</span>
+                </div>
+                
+                <button class="exchange-confirm" id="exchangeConfirmBtn">确认兑换</button>
+            </div>
+        </div>
+    </div>
+
     <script src="i18n.js"></script>
     <script src="dashboard.js"></script>
 </body>

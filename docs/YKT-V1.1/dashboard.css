@@ -216,7 +216,8 @@ body::before {
 
 .app-card.featured .app-icon svg {
     width: 100%;
-    horder-color: #00d4ff;
+    height: 100%;
+    border-color: #00d4ff;
     box-shadow: 0 4px 20px rgba(0, 136, 255, 0.6);
     transform: scale(1.05);
 }
@@ -328,6 +329,276 @@ body::before {
     }
 }
 
+/* 钱包浮层样式 */
+.wallet-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 37, 64, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 60px;
+}
+
+.wallet-popup {
+    width: 420px;
+    max-width: 90vw;
+    background: linear-gradient(135deg, #0a2540 0%, #1e5799 50%, #2989d8 100%);
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    position: relative;
+}
+
+.wallet-popup::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0, 212, 255, 0.03) 40px, rgba(0, 212, 255, 0.03) 41px),
+        repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0, 212, 255, 0.03) 40px, rgba(0, 212, 255, 0.03) 41px);
+    pointer-events: none;
+}
+
+.wallet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 150, 255, 0.5));
+    border: 2px solid rgba(0, 212, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+}
+
+.user-details {
+    color: white;
+}
+
+.user-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.user-position {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.wallet-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.wallet-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.wallet-balance {
+    background: linear-gradient(135deg, rgba(173, 216, 230, 0.3), rgba(173, 216, 230, 0.5));
+    margin: 0 30px 25px;
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.balance-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    box-shadow: 0 4px 15px rgba(255, 170, 0, 0.3);
+}
+
+.balance-info {
+    flex: 1;
+}
+
+.balance-label {
+    color: white;
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 8px;
+}
+
+.balance-amount {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.wallet-actions {
+    display: flex;
+    gap: 15px;
+    padding: 0 30px 25px;
+    position: relative;
+    z-index: 2;
+}
+
+.wallet-btn {
+    flex: 1;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #0099ff, #0066ff);
+    border: 1px solid rgba(0, 212, 255, 0.5);
+    color: white;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.wallet-btn:hover {
+    background: linear-gradient(135deg, #00aaff, #0077ff);
+    border-color: #00d4ff;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.transaction-section {
+    padding: 25px 30px 30px;
+    position: relative;
+    z-index: 2;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.section-more {
+    color: #00d4ff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.section-more:hover {
+    opacity: 0.8;
+}
+
+.transaction-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.1);
+    border-radius: 12px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.transaction-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+.transaction-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.transaction-icon.reward {
+    background: linear-gradient(135deg, #00C853, #4CAF50);
+}
+
+.transaction-icon.purchase {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.transaction-icon.withdraw {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+}
+
+.transaction-details {
+    flex: 1;
+    color: white;
+}
+
+.transaction-type {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.transaction-date {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.transaction-amount {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.transaction-amount.positive {
+    color: #00E676;
+}
+
+.transaction-amount.negative {
+    color: #f44336;
+}
+
 @media (max-width: 480px) {
     body {
         padding: 10px;
@@ -342,4 +613,407 @@ body::before {
         padding: 8px 20px;
         font-size: 12px;
     }
+    
+    .wallet-popup {
+        width: 100%;
+        margin: 0 15px;
+        max-width: none;
+    }
+    
+    .wallet-header,
+    .wallet-actions,
+    .transaction-section {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    
+    .wallet-balance {
+        margin-left: 20px;
+        margin-right: 20px;
+        padding: 20px;
+    }
+    
+    .balance-amount {
+        font-size: 24px;
+    }
+    
+    .wallet-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* 币种选择器样式 */
+.currency-selector {
+    font-size: 14px;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.currency-selector:hover {
+    background: rgba(100, 116, 139, 0.1);
+    border-color: rgba(100, 116, 139, 0.2);
+}
+
+.dropdown-arrow {
+    width: 12px;
+    height: 8px;
+    color: #ffffff;
+    transition: transform 0.2s ease;
+}
+
+.currency-selector.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+/* 币种下拉列表样式 */
+.currency-dropdown {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1002;
+    min-width: 120px;
+}
+
+.currency-dropdown.show {
+    display: flex;
+}
+
+.currency-option {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #1e293b;
+    transition: background 0.2s ease;
+}
+
+.currency-option:hover {
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.currency-option.selected {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+/* 兑换界面样式 */
+.exchange-panel {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    border-radius: 16px;
+    z-index: 1000;
+}
+
+.exchange-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+    position: relative;
+}
+
+.exchange-back {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #666;
+    cursor: pointer;
+    padding: 8px;
+    margin-right: 10px;
+}
+
+.exchange-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+}
+
+.exchange-content {
+    padding: 30px 20px 20px;
+    height: calc(100% - 80px);
+    overflow-y: auto;
+}
+
+.exchange-row {
+    margin-bottom: 25px;
+}
+
+.exchange-label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.exchange-input-group {
+    display: flex;
+    align-items: center;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 2px solid #e9ecef;
+    padding: 0;
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+
+.exchange-input-group:focus-within {
+    border-color: #4f46e5;
+}
+
+.exchange-amount {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 16px;
+    font-size: 18px;
+    color: #333;
+    outline: none;
+}
+
+.exchange-currency {
+    border: none;
+    background: transparent;
+    padding: 16px;
+    font-size: 16px;
+    color: #4f46e5;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    min-width: 120px;
+}
+
+.exchange-arrow {
+    text-align: center;
+    font-size: 20px;
+    color: #666;
+    margin: 15px 0;
+    padding: 10px;
+}
+
+.exchange-rate {
+    background: #f8f9fa;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #666;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.exchange-confirm {
+    width: 100%;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 20px;
+}
+
+.exchange-confirm:hover {
+    background: linear-gradient(135deg, #4338ca, #6d28d9);
+    transform: translateY(-1px);
+}
+
+.exchange-confirm:active {
+    transform: translateY(0);
+}
+
+/* 兑换浮层样式 */
+.exchange-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 37, 64, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.exchange-popup {
+    width: 420px;
+    max-width: 90vw;
+    background: linear-gradient(135deg, #0a2540 0%, #1e5799 50%, #2989d8 100%);
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    position: relative;
+}
+
+.exchange-popup::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0, 212, 255, 0.03) 40px, rgba(0, 212, 255, 0.03) 41px),
+        repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0, 212, 255, 0.03) 40px, rgba(0, 212, 255, 0.03) 41px);
+    pointer-events: none;
+}
+
+.exchange-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.exchange-header h3 {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.exchange-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.exchange-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.exchange-content {
+    padding: 0 30px 30px;
+    position: relative;
+    z-index: 2;
+}
+
+.exchange-section {
+    margin-bottom: 20px;
+}
+
+.exchange-section label {
+    display: block;
+    color: white;
+    font-size: 14px;
+    margin-bottom: 8px;
+    opacity: 0.8;
+}
+
+.exchange-input-group {
+    display: flex;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.exchange-input-group:focus-within {
+    border-color: #00d4ff;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+}
+
+.exchange-amount {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 15px;
+    font-size: 18px;
+    color: white;
+    outline: none;
+}
+
+.exchange-amount::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.exchange-currency {
+    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    font-size: 14px;
+    color: #00d4ff;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    min-width: 100px;
+    border-left: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.exchange-arrow {
+    text-align: center;
+    font-size: 24px;
+    color: #00d4ff;
+    margin: 15px 0;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.exchange-rate {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: white;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.exchange-confirm {
+    width: 100%;
+    background: linear-gradient(135deg, #0099ff, #0066ff);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.exchange-confirm:hover {
+    background: linear-gradient(135deg, #00aaff, #0077ff);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+.exchange-confirm:active {
+    transform: translateY(0);
 }
