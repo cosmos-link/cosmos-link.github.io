@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web4.0直播 - 宇酷通数字生命体平台</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="live-streaming.css">
+</head>
+<body>
+    <!-- 科技感装饰线条 -->
+    <div class="tech-lines">
+        <div class="line line-top"></div>
+        <div class="corner-decoration top-left"></div>
+        <div class="corner-decoration top-right"></div>
+    </div>
+
+    <div class="container">
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <span class="breadcrumb-item">应用中心</span>
+            <span class="breadcrumb-separator">></span>
+            <span class="breadcrumb-item active">Web4.0直播</span>
+        </div>
+
+        <!-- 头部信息栏 -->
+        <div class="header">
+            <div class="streaming-info">
+                <h2 class="page-title">Web4.0 直播</h2>
+                <div class="tabs">
+                    <button class="tab-btn active" data-category="life">生活</button>
+                    <button class="tab-btn" data-category="knowledge">知识</button>
+                    <button class="tab-btn" data-category="shopping">带货</button>
+                    <button class="tab-btn" data-category="talent">才艺</button>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-record" id="recordBtn">录制视频</button>
+                <button class="btn-back" id="backBtn">返回</button>
+            </div>
+        </div>
+
+        <!-- 空状态提示 -->
+        <div class="empty-state" id="emptyState">
+            <div class="empty-state-icon">📹</div>
+            <h3>暂无视频</h3>
+            <p>点击"录制视频"开始创建您的第一个视频</p>
+        </div>
+
+        <!-- 视频网格 -->
+        <div class="video-grid" id="videoGrid">
+            <!-- 10个视频位置 -->
+            <div class="video-card" data-index="1">
+                <div class="video-placeholder">
+                    <div class="placeholder-icon">
+                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="16" width="48" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                            <path d="M24 28L36 34L24 40V28Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="placeholder-text">视频1</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">视频名称视频名称</div>
+                    <div class="video-subtitle">副标题副标题副标题副标题副标题副标题</div>
+                </div>
+            </div>
+
+            <div class="video-card" data-index="2">
+                <div class="video-placeholder">
+                    <div class="placeholder-icon">
+                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="16" width="48" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                            <path d="M24 28L36 34L24 40V28Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="placeholder-text">视频1</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">视频名称视频名称</div>
+                    <div class="video-subtitle">副标题副标题副标题副标题副标题副标题</div>
+                </div>
+            </div>
+
+            <div class="video-card" data-index="3">
+                <div class="video-placeholder">
+                    <div class="placeholder-icon">
+                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="16" width="48" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                            <path d="M24 28L36 34L24 40V28Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="placeholder-text">视频1</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">视频名称视频名称</div>
+                    <div class="video-subtitle">副标题副标题副标题副标题副标题副标题</div>
+                </div>
+            </div>
+
+            <div class="video-card" data-index="4">
+                <div class="video-placeholder">
+                    <div class="placeholder-icon">
+                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="16" width="48" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                            <path d="M24 28L36 34L24 40V28Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="placeholder-text">视频1</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">视频名称视频名称</div>
+                    <div class="video-subtitle">副标题副标题副标题副标题副标题副标题</div>
+                </div>
+            </div>
+
+            <div class="video-card" data-index="5">
+                <div class="video-placeholder">
+                    <div class="placeholder-icon">
+                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="16" width="48" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                            <path d="M24 28L36 34L24 40V28Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="placeholder-text">视频1</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">视频名称视频名称</div>
+                    <div class="video-subtitle">副标题副标题副标题副标题副标题副标题</div>
+                </div>
+            </div>
+
+            <div class="video-card" data-index="6">
+                <div class="video-placeholder">
+                    <div class="placeholder-icon">
+                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="16" width="48" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                            <path d="M24 28L36 34L24 40V28Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="placeholder-text">视频1</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">视频名称视频名称</div>
+                    <div class="video-subtitle">副标题副标题副标题副标题副标题副标题</div>
+                </div>
+            </div>
+
+            <div class="video-card" data-index="7">
+                <div class="video-placeholder">
+                    <div class="placeholder-icon">
+                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="16" width="48" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                            <path d="M24 28L36 34L24 40V28Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="placeholder-text">视频1</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">视频名称视频名称</div>
+                    <div class="video-subtitle">副标题副标题副标题副标题副标题副标题</div>
+                </div>
+            </div>
+
+            <div class="video-card" data-index="8">
+                <div class="video-placeholder">
+                    <div class="placeholder-icon">
+                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="16" width="48" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                            <path d="M24 28L36 34L24 40V28Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="placeholder-text">视频1</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">视频名称视频名称</div>
+                    <div class="video-subtitle">副标题副标题副标题副标题副标题副标题</div>
+                </div>
+            </div>
+
+            <div class="video-card" data-index="9">
+                <div class="video-placeholder">
+                    <div class="placeholder-icon">
+                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="16" width="48" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                            <path d="M24 28L36 34L24 40V28Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="placeholder-text">视频1</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">视频名称视频名称</div>
+                    <div class="video-subtitle">副标题副标题副标题副标题副标题副标题</div>
+                </div>
+            </div>
+
+            <div class="video-card" data-index="10">
+                <div class="video-placeholder">
+                    <div class="placeholder-icon">
+                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="16" width="48" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                            <path d="M24 28L36 34L24 40V28Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="placeholder-text">视频1</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">视频名称视频名称</div>
+                    <div class="video-subtitle">副标题副标题副标题副标题副标题副标题</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="i18n.js"></script>
+    <script src="live-streaming.js"></script>
+</body>
+</html>

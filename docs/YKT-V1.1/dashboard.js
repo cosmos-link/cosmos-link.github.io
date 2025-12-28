@@ -51,6 +51,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.location.href = 'blockchain-data.html';
             } else if (appName === '算力中心') {
                 window.location.href = 'computing-power.html';
+            } else if (appName === 'Web4.0直播') {
+                window.location.href = 'live-streaming.html';
             } else {
                 alert('打开应用: ' + appName);
             }
