@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>程序员本地博客</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-code"></i> 程序员博客</h1>
+            <nav>
+                <button id="homeBtn"><i class="fas fa-home"></i> 首页</button>
+                <button id="newBtn"><i class="fas fa-plus"></i> 写博客</button>
+                <button id="listBtn"><i class="fas fa-list"></i> 博客列表</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="homeView" class="view">
+            <h2>欢迎来到程序员博客</h2>
+            <p>这是一个基于浏览器本地存储的博客系统，您的所有数据都保存在本地浏览器中。</p>
+            <div class="stats">
+                <div class="stat-card">
+                    <i class="fas fa-file-alt"></i>
+                    <h3 id="blogCount">0</h3>
+                    <p>篇博客</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3 id="lastUpdate">-</h3>
+                    <p>最后更新</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="editorView" class="view" style="display: none;">
+            <h2><i class="fas fa-edit"></i> 撰写新博客</h2>
+            <form id="blogForm">
+                <input type="text" id="title" placeholder="博客标题" required>
+                <textarea id="content" placeholder="博客内容（支持Markdown）" rows="15" required></textarea>
+                <input type="text" id="tags" placeholder="标签（用逗号分隔）">
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary"><i class="fas fa-save"></i> 保存博客</button>
+                    <button type="button" id="cancelBtn" class="btn-secondary">取消</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="listView" class="view" style="display: none;">
+            <h2><i class="fas fa-list"></i> 博客列表</h2>
+            <div id="blogList">
+                <!-- 博客列表将在这里动态生成 -->
+            </div>
+        </div>
+
+        <div id="detailView" class="view" style="display: none;">
+            <button id="backBtn" class="btn-secondary"><i class="fas fa-arrow-left"></i> 返回</button>
+            <h2 id="detailTitle"></h2>
+            <div class="blog-meta">
+                <span id="detailDate"></span>
+                <span id="detailTags"></span>
+            </div>
+            <div id="detailContent" class="blog-content"></div>
+            <div class="blog-actions">
+                <button id="editBtn" class="btn-primary"><i class="fas fa-edit"></i> 编辑</button>
+                <button id="deleteBtn" class="btn-danger"><i class="fas fa-trash"></i> 删除</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2023 程序员本地博客 | 数据存储在浏览器本地</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
