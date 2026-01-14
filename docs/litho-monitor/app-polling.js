@@ -25,7 +25,9 @@ const state = {
         overlay: []
     },
     chartIntervals: {},
-    pollingInterval: null
+    pollingInterval: null,
+    lastDataUpdate: null,
+    watchdogInterval: null
 };
 
 // ============================================================================
@@ -34,6 +36,11 @@ const state = {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 应用初始化...');
     initChartTabs();
+    
+    // 设置默认活动图表
+    switchChart('temperature');
+    console.log('✅ 设置默认图表为温度');
+    
     initCharts();
     updateCurrentTime();
     setInterval(updateCurrentTime, 1000);
@@ -43,6 +50,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 初始化时获取历史数据
     fetchInitialData();
+    
+    // 启动看门狗定时器
+    startWatchdog();
+    
+    // 添加测试按钮来强制更新图表
+    window.testChartUpdate = () => {
+        console.log('🧪 [TEST] 强制测试图表更新');
+        updateChart('temperature');
+    };
+    
+    console.log('✅ 初始化完成! 输入 testChartUpdate() 来测试图表更新');
 });
 
 // ============================================================================
@@ -50,25 +68,47 @@ document.addEventListener('DOMContentLoaded', () => {
 // ============================================================================
 async function fetchData(url) {
     try {
+        console.log(`🌐 请求 API: ${url}`);
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return await response.json();
+        const result = await response.json();
+        console.log(`✅ API响应成功`, result);
+        return result;
     } catch (error) {
-        console.error(`API请求失败 ${url}:`, error);
+        console.error(`❌ API请求失败 ${url}:`, error);
         return null;
     }
 }
 
 async function fetchLatestData() {
-    const result = await fetchData(config.apiUrls.latest);
-    if (result && result.status === 'ok') {
-        updateMetrics(result.data);
-        addDataPoint(result.data);
-        updateConnectionStatus(true);
-        return result.data;
-    } else {
+    console.log('🔄 获取最新数据...');
+    try {
+        const result = await fetchData(config.apiUrls.latest);
+        if (result && result.status === 'ok') {
+            console.log('📊 更新数据:', result.data);
+            updateMetrics(result.data);
+            
+            // 添加timestamp到数据中
+            const dataWithTimestamp = {
+                ...result.data,
+                timestamp: result.timestamp || new Date().toISOString()
+            };
+            console.log('➕ 准备添加带时间戳的数据:', dataWithTimestamp);
+            addDataPoint(dataWithTimestamp);
+            
+            updateConnectionStatus(true);
+            // 更新最后数据时间
+            state.lastDataUpdate = new Date();
+            return result.data;
+        } else {
+            console.log('❌ 数据获取失败');
+            updateConnectionStatus(false);
+            return null;
+        }
+    } catch (error) {
+        console.error('❌ fetchLatestData 错误:', error);
         updateConnectionStatus(false);
         return null;
     }
@@ -117,11 +157,19 @@ async function checkHealth() {
 function startPolling() {
     console.log('🔄 开始数据轮询...');
     
+    // 先停止任何现有的轮询
+    stopPolling();
+    
     // 立即执行一次
     pollData();
     
     // 设置定时轮询
-    state.pollingInterval = setInterval(pollData, config.chartUpdateInterval);
+    state.pollingInterval = setInterval(() => {
+        console.log(`⏰ 定时轮询触发 (${new Date().toLocaleTimeString()})`);
+        pollData();
+    }, config.chartUpdateInterval);
+    
+    console.log(`✅ 轮询已启动，间隔: ${config.chartUpdateInterval}ms`);
 }
 
 function stopPolling() {
@@ -134,11 +182,18 @@ function stopPolling() {
 
 async function pollData() {
     try {
+        console.log('🔄 执行轮询...');
         // 并行获取最新数据和告警信息
         const [latestData, alarms] = await Promise.all([
             fetchLatestData(),
             fetchAlarms()
         ]);
+        
+        if (latestData) {
+            console.log('✅ 轮询成功');
+        } else {
+            console.log('⚠️ 轮询数据为空');
+        }
         
         // 定期检查健康状态
         if (Math.random() < 0.1) { // 10%概率检查健康状态
@@ -146,8 +201,9 @@ async function pollData() {
         }
         
     } catch (error) {
-        console.error('轮询数据时出错:', error);
+        console.error('❌ 轮询数据时出错:', error);
         updateConnectionStatus(false);
+        // 不要停止轮询，继续下一次尝试
     }
 }
 
@@ -182,11 +238,19 @@ function updateCurrentTime() {
 function updateMetrics(data) {
     if (!data) return;
     
-    // 更新状态
+    // 更新状态 - 处理数字状态码
     const statusElement = document.getElementById('metric-status');
-    if (statusElement && data.MachineStatus) {
-        statusElement.textContent = data.MachineStatus;
-        statusElement.className = `metric-value status-value ${data.MachineStatus.toLowerCase()}`;
+    if (statusElement && data.MachineStatus !== undefined) {
+        // 将数字状态码转换为文本
+        const statusMap = {
+            1: 'Idle',
+            2: 'Execute', 
+            3: 'Pause',
+            4: 'Error'
+        };
+        const statusText = statusMap[data.MachineStatus] || `Status${data.MachineStatus}`;
+        statusElement.textContent = statusText;
+        statusElement.className = `metric-value status-value ${statusText.toLowerCase()}`;
     }
     
     // 更新晶圆数量
@@ -221,9 +285,20 @@ function updateMetrics(data) {
 }
 
 function addDataPoint(data) {
-    if (!data || !data.timestamp) return;
+    if (!data || !data.timestamp) {
+        console.log('❌ 无效数据点:', data);
+        return;
+    }
     
     const timestamp = new Date(data.timestamp);
+    
+    console.log('📈 添加数据点:', {
+        time: timestamp.toLocaleTimeString(),
+        temp: data.Temperature,
+        vibration: data.StageVibration,
+        dose: data.DoseError,
+        overlay: data.OverlayPrecision
+    });
     
     // 添加新数据点
     state.dataHistory.timestamps.push(timestamp);
@@ -241,8 +316,15 @@ function addDataPoint(data) {
         state.dataHistory.overlay.shift();
     }
     
-    // 更新图表
-    updateChart(state.activeChart);
+    console.log(`📊 历史数据长度: ${state.dataHistory.timestamps.length}, 活动图表: ${state.activeChart}`);
+    
+    // 只更新当前活动的图表
+    if (state.activeChart) {
+        console.log(`🎯 更新活动图表: ${state.activeChart}`);
+        updateChart(state.activeChart);
+    } else {
+        console.log('⚠️ 没有活动图表，跳过更新');
+    }
 }
 
 function updateAlarms(alarms) {
@@ -288,6 +370,8 @@ function initChartTabs() {
 }
 
 function switchChart(chartType) {
+    console.log(`🔄 切换到图表: ${chartType}`);
+    
     // 更新标签状态
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-chart') === chartType);
@@ -299,7 +383,12 @@ function switchChart(chartType) {
     });
     
     state.activeChart = chartType;
-    updateChart(chartType);
+    
+    // 立即更新新的活动图表
+    setTimeout(() => {
+        updateChart(chartType);
+        console.log(`✅ 完成图表切换到: ${chartType}`);
+    }, 100);
 }
 
 function initCharts() {
@@ -312,24 +401,69 @@ function initCharts() {
 }
 
 function updateChart(chartType) {
+    console.log(`🎨 [CHART] 开始更新图表: ${chartType}`);
     const canvas = document.getElementById(`chart-${chartType}`);
-    if (!canvas) return;
+    if (!canvas) {
+        console.log(`❌ [CHART] 找不到画布: chart-${chartType}`);
+        return;
+    }
     
-    const ctx = canvas.getContext('2d');
+    // 检查Canvas是否可见
+    const isVisible = canvas.offsetWidth > 0 && canvas.offsetHeight > 0;
+    const hasActiveClass = canvas.classList.contains('active');
+    console.log(`👁️ [CHART] 画布 ${chartType} 状态: 可见=${isVisible} (${canvas.offsetWidth}x${canvas.offsetHeight}), active类=${hasActiveClass}`);
+    
+    if (!isVisible) {
+        console.log(`⚠️ [CHART] 画布不可见，跳过渲染`);
+        return;
+    }
+    
+    // 确保Canvas尺寸正确
     const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width;
-    canvas.height = rect.height;
+    const dpr = window.devicePixelRatio || 1;
+    
+    // 设置实际尺寸
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    
+    // 缩放canvas以匹配设备像素比
+    const ctx = canvas.getContext('2d'); // 获取context（只声明一次）
+    ctx.setTransform(1, 0, 0, 1, 0, 0); // 重置变换，避免多次scale叠加
+    ctx.scale(dpr, dpr); // 缩放canvas以匹配设备像素比
+    
+    // 设置CSS尺寸
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
     
     // 清除画布
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, rect.width, rect.height);
     
     const data = state.dataHistory[chartType] || [];
     const timestamps = state.dataHistory.timestamps || [];
     
-    if (data.length < 2) return;
+    console.log(`📊 [CHART] 图表数据 ${chartType}: ${data.length} 个数据点 [${data.slice(-3).join(', ')}]`);
+    
+    // 获取context
+    // const ctx = canvas.getContext('2d');
+    
+    // 清除画布
+    ctx.clearRect(0, 0, rect.width, rect.height);
+    
+    // 先绘制一个测试矩形，确保Canvas工作
+    ctx.fillStyle = '#f0f0f0';
+    ctx.fillRect(10, 10, 50, 30);
+    ctx.fillStyle = '#333';
+    ctx.font = '12px Arial';
+    ctx.fillText(`Test ${chartType}`, 15, 28);
+    
+    if (data.length < 2) {
+        console.log('⚠️ [CHART] 数据点不足，只显示测试内容');
+        return;
+    }
     
     // 绘制图表
-    drawChart(ctx, data, timestamps, canvas.width, canvas.height, chartType);
+    drawChart(ctx, data, timestamps, rect.width, rect.height, chartType);
+    console.log(`✅ 图表 ${chartType} 更新完成`);
 }
 
 function drawChart(ctx, data, timestamps, width, height, chartType) {
@@ -337,10 +471,24 @@ function drawChart(ctx, data, timestamps, width, height, chartType) {
     const chartWidth = width - 2 * padding;
     const chartHeight = height - 2 * padding;
     
-    // 计算数据范围
+    console.log(`🖼️ 绘制图表 ${chartType}: ${data.length} 个数据点, 尺寸: ${width}x${height}`);
+    
+    if (data.length === 0 || chartWidth <= 0 || chartHeight <= 0) {
+        console.log('❌ 无效的绘制参数');
+        return;
+    }
+    
+    // 计算数据范围，确保有合理的范围
     const minValue = Math.min(...data);
     const maxValue = Math.max(...data);
-    const valueRange = maxValue - minValue || 1;
+    let valueRange = maxValue - minValue;
+    
+    // 如果数据范围太小，设置一个最小范围
+    if (valueRange < 0.01) {
+        valueRange = 1;
+    }
+    
+    console.log(`📈 数据范围: ${minValue.toFixed(3)} - ${maxValue.toFixed(3)}, 范围: ${valueRange.toFixed(3)}`);
     
     // 设置样式
     const colors = {
@@ -357,30 +505,73 @@ function drawChart(ctx, data, timestamps, width, height, chartType) {
     
     // 绘制数据线
     ctx.beginPath();
+    let validPointsCount = 0;
     
     data.forEach((value, index) => {
-        const x = padding + (index / (data.length - 1)) * chartWidth;
-        const y = padding + (1 - (value - minValue) / valueRange) * chartHeight;
+        if (typeof value !== 'number' || isNaN(value)) {
+            return;
+        }
         
-        if (index === 0) {
+        const x = padding + (index / (data.length - 1)) * chartWidth;
+        const normalizedY = (value - minValue) / valueRange;
+        const y = padding + (1 - normalizedY) * chartHeight;
+        
+        if (validPointsCount === 0) {
             ctx.moveTo(x, y);
         } else {
             ctx.lineTo(x, y);
         }
+        validPointsCount++;
     });
     
-    ctx.stroke();
+    if (validPointsCount > 1) {
+        ctx.stroke();
+    }
     
     // 绘制数据点
     ctx.fillStyle = colors[chartType] || '#666';
     data.forEach((value, index) => {
+        if (typeof value !== 'number' || isNaN(value)) {
+            return;
+        }
+        
         const x = padding + (index / (data.length - 1)) * chartWidth;
-        const y = padding + (1 - (value - minValue) / valueRange) * chartHeight;
+        const normalizedY = (value - minValue) / valueRange;
+        const y = padding + (1 - normalizedY) * chartHeight;
         
         ctx.beginPath();
         ctx.arc(x, y, 3, 0, Math.PI * 2);
         ctx.fill();
     });
+    
+    console.log(`✅ 图表绘制完成: ${validPointsCount} 个有效点`);
+}
+
+// ============================================================================
+// 看门狗机制 - 检测轮询是否正常工作
+// ============================================================================
+function startWatchdog() {
+    console.log('🐕 启动看门狗...');
+    state.watchdogInterval = setInterval(checkPollingHealth, 10000); // 每10秒检查一次
+}
+
+function checkPollingHealth() {
+    const now = new Date();
+    const timeSinceLastUpdate = state.lastDataUpdate ? now - state.lastDataUpdate : Infinity;
+    
+    console.log(`🐕 看门狗检查: 距离上次数据更新 ${Math.round(timeSinceLastUpdate/1000)}秒`);
+    
+    // 如果超过6秒没有数据更新，重启轮询
+    if (timeSinceLastUpdate > 6000) {
+        console.log('⚠️ 检测到轮询异常，重启轮询机制...');
+        startPolling();
+    }
+    
+    // 检查轮询间隔是否还存在
+    if (!state.pollingInterval) {
+        console.log('⚠️ 检测到轮询已停止，重新启动...');
+        startPolling();
+    }
 }
 
 // ============================================================================
@@ -388,16 +579,14 @@ function drawChart(ctx, data, timestamps, width, height, chartType) {
 // ============================================================================
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-        // 页面隐藏时降低轮询频率
-        if (state.pollingInterval) {
-            clearInterval(state.pollingInterval);
-            state.pollingInterval = setInterval(pollData, config.chartUpdateInterval * 2);
-        }
+        console.log('📱 页面隐藏，保持正常轮询频率');
+        // 保持正常频率，不降低
     } else {
-        // 页面可见时恢复正常频率
-        if (state.pollingInterval) {
-            clearInterval(state.pollingInterval);
-            state.pollingInterval = setInterval(pollData, config.chartUpdateInterval);
+        console.log('📱 页面可见，确保轮询正常');
+        // 页面可见时确保轮询正常
+        if (!state.pollingInterval) {
+            console.log('🔄 页面重新可见，重启轮询');
+            startPolling();
         }
     }
 });
@@ -406,5 +595,10 @@ document.addEventListener('visibilitychange', () => {
 // 页面卸载清理
 // ============================================================================
 window.addEventListener('beforeunload', () => {
+    console.log('🔄 页面卸载，清理资源...');
     stopPolling();
+    if (state.watchdogInterval) {
+        clearInterval(state.watchdogInterval);
+        state.watchdogInterval = null;
+    }
 });
