@@ -7,10 +7,10 @@ const config = {
     maxDataPoints: 60,
     chartUpdateInterval: 2000, // 2秒轮询一次
     apiUrls: {
-        latest: '/api/data/latest',
-        history: '/api/data/history', 
-        alarms: '/api/alarms',
-        health: '/api/health'
+        latest: '/litho-monitor/api/data/latest',
+        history: '/litho-monitor/api/data/history', 
+        alarms: '/litho-monitor/api/alarms',
+        health: '/litho-monitor/api/health'
     }
 };
 
