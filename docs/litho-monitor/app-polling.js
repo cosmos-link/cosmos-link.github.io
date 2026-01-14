@@ -449,13 +449,6 @@ function updateChart(chartType) {
     // 清除画布
     ctx.clearRect(0, 0, rect.width, rect.height);
     
-    // 先绘制一个测试矩形，确保Canvas工作
-    ctx.fillStyle = '#f0f0f0';
-    ctx.fillRect(10, 10, 50, 30);
-    ctx.fillStyle = '#333';
-    ctx.font = '12px Arial';
-    ctx.fillText(`Test ${chartType}`, 15, 28);
-    
     if (data.length < 2) {
         console.log('⚠️ [CHART] 数据点不足，只显示测试内容');
         return;
@@ -482,20 +475,15 @@ function drawChart(ctx, data, timestamps, width, height, chartType) {
     const minValue = Math.min(...data);
     const maxValue = Math.max(...data);
     let valueRange = maxValue - minValue;
-    
-    // 如果数据范围太小，设置一个最小范围
-    if (valueRange < 0.01) {
-        valueRange = 1;
-    }
-    
+    if (valueRange < 0.01) valueRange = 1;
     console.log(`📈 数据范围: ${minValue.toFixed(3)} - ${maxValue.toFixed(3)}, 范围: ${valueRange.toFixed(3)}`);
     
     // 设置样式
     const colors = {
-        temperature: '#ff6b6b',
-        vibration: '#4ecdc4', 
-        dose: '#45b7d1',
-        overlay: '#96ceb4'
+        temperature: '#ff3b30', // 红色
+        vibration: '#007aff',   // 蓝色
+        dose: '#34c759',        // 绿色
+        overlay: '#af52de'      // 紫色
     };
     
     ctx.strokeStyle = colors[chartType] || '#666';
@@ -503,47 +491,92 @@ function drawChart(ctx, data, timestamps, width, height, chartType) {
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     
-    // 绘制数据线
+    // 绘制纵轴刻度线和标签
+    ctx.save();
+    ctx.strokeStyle = '#ccc';
+    ctx.fillStyle = '#888';
+    ctx.font = '12px Arial';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    const yTicks = 5;
+    for (let i = 0; i <= yTicks; i++) {
+        const y = padding + (chartHeight / yTicks) * i;
+        const value = maxValue - (valueRange / yTicks) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding - 5, y);
+        ctx.lineTo(width - padding, y);
+        ctx.stroke();
+        ctx.fillText(value.toFixed(2), padding - 10, y);
+    }
+    ctx.restore();
+
+    // 绘制横轴刻度线和时间标签
+    ctx.save();
+    ctx.strokeStyle = '#eee';
+    ctx.fillStyle = '#888';
+    ctx.font = '11px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    const xTicks = Math.min(6, data.length - 1);
+    for (let i = 0; i <= xTicks; i++) {
+        const idx = Math.round(i * (data.length - 1) / xTicks);
+        const x = padding + (idx / (data.length - 1)) * chartWidth;
+        ctx.beginPath();
+        ctx.moveTo(x, height - padding + 5);
+        ctx.lineTo(x, padding);
+        ctx.stroke();
+        if (timestamps[idx]) {
+            let label = '';
+            if (timestamps[idx] instanceof Date) {
+                label = timestamps[idx].toLocaleTimeString();
+            } else if (typeof timestamps[idx] === 'string') {
+                label = timestamps[idx].slice(11, 19); // 只取时分秒
+            }
+            ctx.fillText(label, x, height - padding + 8);
+        }
+    }
+    ctx.restore();
+
+    // 绘制折线图
     ctx.beginPath();
     let validPointsCount = 0;
-    
+    let lastX = null, lastY = null;
     data.forEach((value, index) => {
         if (typeof value !== 'number' || isNaN(value)) {
             return;
         }
-        
         const x = padding + (index / (data.length - 1)) * chartWidth;
         const normalizedY = (value - minValue) / valueRange;
         const y = padding + (1 - normalizedY) * chartHeight;
-        
         if (validPointsCount === 0) {
             ctx.moveTo(x, y);
         } else {
             ctx.lineTo(x, y);
         }
         validPointsCount++;
+        if (index === data.length - 1) {
+            lastX = x;
+            lastY = y;
+        }
     });
-    
     if (validPointsCount > 1) {
+        ctx.strokeStyle = colors[chartType] || '#666';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
         ctx.stroke();
     }
-    
-    // 绘制数据点
-    ctx.fillStyle = colors[chartType] || '#666';
-    data.forEach((value, index) => {
-        if (typeof value !== 'number' || isNaN(value)) {
-            return;
-        }
-        
-        const x = padding + (index / (data.length - 1)) * chartWidth;
-        const normalizedY = (value - minValue) / valueRange;
-        const y = padding + (1 - normalizedY) * chartHeight;
-        
+    // 在最后一个数据点加小圆点
+    if (lastX !== null && lastY !== null) {
+        ctx.save();
         ctx.beginPath();
-        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.arc(lastX, lastY, 5, 0, Math.PI * 2);
+        ctx.fillStyle = colors[chartType] || '#666';
+        ctx.shadowColor = '#fff';
+        ctx.shadowBlur = 2;
         ctx.fill();
-    });
-    
+        ctx.restore();
+    }
     console.log(`✅ 图表绘制完成: ${validPointsCount} 个有效点`);
 }
 
