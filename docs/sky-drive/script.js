@@ -1,15 +1,16 @@
 // ==================== 可调整参数 ====================
 const CONFIG = {
-    particleDensity: 0.0008,      // 粒子密度（每平方像素的粒子数）
+    particleDensity: 0.0007,      // 粒子密度（每平方像素的粒子数）
     particleSpeedMin: 1.0,        // 粒子最小速度
-    particleSpeedMax: 2.5,        // 粒子最大速度（speedMin + 2.0）
+    particleSpeedMax: 3.5,        // 粒子最大速度（speedMin + 2.0）
     particleSizeMin: 0.5,         // 粒子最小尺寸
     particleSizeMax: 1.5,         // 粒子最大尺寸（sizeMin + 2.0）
     particleColor: 'rgba(255, 255, 255',  // 粒子颜色（RGB格式，不含透明度）
     mouseRadius: 150,             // 鼠标影响范围
     mouseForce: 0.02,             // 鼠标推力强度
-    connectionDistanceRatio: 0.05, // 连线距离比例（相对于屏幕宽度）
-    connectionOpacity: 0.5,       // 连线最大透明度
+    connectionDistanceBase: 7,   // 连线基础距离（像素）- 直接调整这个值来控制连线多少
+    connectionDistanceRatio: 0.021, // 连线距离额外比例（相对于屏幕宽度）
+    connectionOpacity: 0.7,       // 连线最大透明度
     connectionColor: 'rgba(102, 126, 234',  // 连线颜色（RGB格式，不含透明度）
     connectionLineWidth: 0.5,     // 连线宽度
     trailLength: 5,              // 运动轨迹长度
@@ -162,8 +163,8 @@ function init() {
     const screenArea = width * height;
     const particleCount = Math.floor(screenArea * CONFIG.particleDensity);
     
-    // 根据屏幕宽度动态计算连线距离
-    dynamicConnectionDistance = width * CONFIG.connectionDistanceRatio;
+    // 根据屏幕宽度动态计算连线距离，设置最小值确保小屏幕也能看到连线
+    dynamicConnectionDistance = Math.max(80, width * CONFIG.connectionDistanceRatio);
     
     console.log(`屏幕尺寸: ${width}x${height}, 粒子数量: ${particleCount}, 连线距离: ${dynamicConnectionDistance.toFixed(0)}`);
     
