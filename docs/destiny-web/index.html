@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>命运之书 - 开启平行时空的可能</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0f172a; color: #f8fafc; font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .glow-btn { transition: 0.3s; box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
+        .glow-btn:hover { box-shadow: 0 0 25px rgba(99, 102, 241, 0.7); transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const App = () => {
+            const [birthDate, setBirthDate] = useState('');
+            const [regret, setRegret] = useState('');
+            const [result, setResult] = useState(null);
+            const [story, setStory] = useState('');
+
+            // 简化的天干地支算法逻辑
+            const calculateBazi = (date) => {
+                const year = new Date(date).getFullYear();
+                const gan = ['庚', '辛', '壬', '癸', '甲', '乙', '丙', '丁', '戊', '己'];
+                const zhi = ['申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳', '午', '未'];
+                const baziYear = gan[year % 10] + zhi[year % 12];
+                
+                return {
+                    year: baziYear,
+                    luckyYears: [year + 10, year + 20, year + 30],
+                    currentWarning: "流年遇水，宜静不宜动，忌盲目投资，宜修身养性。"
+                };
+            };
+
+            const handleSubmit = () => {
+                if (!birthDate) return alert("请输入出生日期");
+                const baziData = calculateBazi(birthDate);
+                setResult(baziData);
+            };
+
+            const handleRewrite = () => {
+                if (!regret) return alert("请输入你的遗憾");
+                
+                // 模拟正能量续写逻辑
+                const positiveTemplates = [
+                    "那一刻的错过，其实是命运为了让你在更成熟的年纪相遇。在那个平行时空里，你们学会了如何更好地沟通，那些争吵变成了彼此理解的基石。而现实中的你，带着这份觉察，已经拥有了爱与被爱的新能力。",
+                    "如果那时没有放弃，现在的你或许已经攀上了那座高峰。但请相信，曾经的弯路其实是另一种积累。在重写的结局里，你依然成功了，只是换了一种更稳健、更温柔的方式。你的坚持从未白费。",
+                    "生命中的每一个遗憾，都是一枚指引成长的书签。在那个没有分手的时空，你们共同经历了风雨，而这些风雨最终化作了你内心坚不可摧的力量。现在的你，正带着这份力量走向更好的未来。"
+                ];
+                setStory(positiveTemplates[Math.floor(Math.random() * positiveTemplates.length)]);
+            };
+
+            return (
+                <div className="min-h-screen p-4 md:p-8 flex flex-col items-center">
+                    <header className="text-center mb-12">
+                        <h1 className="text-4xl font-bold text-indigo-400 mb-2">命运之书</h1>
+                        <p className="text-slate-400">探索八字流年，治愈心中遗憾</p>
+                    </header>
+
+                    <main className="w-full max-w-2xl space-y-8">
+                        {/* 第一部分：八字流年 */}
+                        <section className="glass-card p-6 rounded-2xl">
+                            <h2 className="text-xl font-semibold mb-4 flex items-center">
+                                <span className="mr-2">📅</span> 命理推算
+                            </h2>
+                            <div className="flex gap-4 mb-6">
+                                <input 
+                                    type="date" 
+                                    className="bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 flex-1 outline-none focus:border-indigo-500"
+                                    onChange={(e) => setBirthDate(e.target.value)}
+                                />
+                                <button 
+                                    onClick={handleSubmit}
+                                    className="glow-btn bg-indigo-600 px-6 py-2 rounded-lg font-bold"
+                                >
+                                    排盘
+                                </button>
+                            </div>
+
+                            {result && (
+                                <div className="bg-slate-900/50 p-4 rounded-xl space-y-3 animate-fade-in">
+                                    <p>您的出生年柱：<span className="text-indigo-400 font-bold">{result.year}</span></p>
+                                    <p>大运年份提示：{result.luckyYears.join(', ')}</p>
+                                    <p className="text-yellow-200/80">流年禁忌：{result.currentWarning}</p>
+                                </div>
+                            )}
+                        </section>
+
+                        {/* 第二部分：遗憾续写 */}
+                        <section className="glass-card p-6 rounded-2xl">
+                            <h2 className="text-xl font-semibold mb-4 flex items-center">
+                                <span className="mr-2">✍️</span> 遗憾续写
+                            </h2>
+                            <textarea 
+                                placeholder="输入你的遗憾，例如：2023年和女友分手..."
+                                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 h-32 mb-4 outline-none focus:border-indigo-500"
+                                value={regret}
+                                onChange={(e) => setRegret(e.target.value)}
+                            />
+                            <button 
+                                onClick={handleRewrite}
+                                className="w-full bg-emerald-600 hover:bg-emerald-500 py-3 rounded-lg font-bold transition shadow-lg shadow-emerald-900/20"
+                            >
+                                开启平行时空
+                            </button>
+
+                            {story && (
+                                <div className="mt-6 p-4 border-l-4 border-emerald-500 bg-emerald-500/10 italic text-slate-200 leading-relaxed">
+                                    “{story}”
+                                    <div className="mt-4 not-italic text-sm text-emerald-400 font-semibold text-right">
+                                        —— 愿你历经千帆，归来仍是少年
+                                    </div>
+                                </div>
+                            )}
+                        </section>
+                    </main>
+
+                    <footer className="mt-16 text-slate-500 text-sm">
+                        &copy; 2026 命运之书 - 专业命理与心理疏导
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
