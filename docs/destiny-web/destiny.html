@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天枢命理 Destiny Engine Pro</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Zhi+Mang+Xing&display=swap');
+        body { background: #0a0a0a; color: #e2e8f0; font-family: 'Noto Serif SC', serif; }
+        .glass { background: rgba(23, 23, 23, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(184, 134, 11, 0.2); }
+        .title-font { font-family: 'Zhi Mang Xing', cursive; }
+        .gold-gradient { background: linear-gradient(135deg, #b8860b 0%, #ffd700 50%, #b8860b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .report-section { border-left: 2px solid #444; padding-left: 1.5rem; margin-bottom: 2rem; position: relative; }
+        .report-section::before { content: ''; position: absolute; left: -5px; top: 0; width: 8px; height: 8px; background: #b8860b; border-radius: 50%; }
+        .bazi-pill { background: #1a1a1a; border: 1px solid #333; border-bottom: 3px solid #b8860b; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const KEY = "c2stYjQ2OWIwNDNhNjE2NGNjODkzM2ZiZDg2M2I0NTgzMTg=";
+        const getK = () => atob(KEY);
+
+        const App = () => {
+            const [user, setUser] = useState({ date: '', time: '子时', sex: '男', loc: '', regret: '' });
+            const [res, setRes] = useState({ report: '', story: '', guide: '' });
+            const [loading, setLoading] = useState(false);
+
+            const callAI = async (sys, prompt, target) => {
+                setLoading(true);
+                try {
+                    const resp = await fetch("https://api.deepseek.com/chat/completions", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getK()}` },
+                        body: JSON.stringify({
+                            model: "deepseek-chat",
+                            messages: [{ role: "system", content: sys }, { role: "user", content: prompt }]
+                        })
+                    });
+                    const data = await resp.json();
+                    setRes(prev => ({ ...prev, [target]: data.choices[0].message.content }));
+                } catch (e) { alert("天机不可泄露（网络请求失败）"); }
+                setLoading(false);
+            };
+
+            const handleAnalysis = () => {
+                const sys = `你是一名专业命理大师，需结合联网搜索。
+                1. 输出八字数列。2. 深度剖析性格、缺点及操作建议。3. 分析财运、仕途。
+                4. 明确大运起运年、转运时间。5. 细化情感婚姻。
+                6. 判定当年吉凶（含犯小人/破财预防）。7. 严格注明引用来源。`;
+                const p = `基础信息：生日${user.date}，时辰${user.time}，性别${user.sex}，出生地${user.loc}。
+                请先执行地理经纬度对冲计算真太阳时，再输出报告。`;
+                callAI(sys, p, 'report');
+            };
+
+            const handleStory = () => {
+                const sys = `你是平行世界编剧。结合用户八字和遗憾，以近十年中国社会发展（如：房地产、互联网、疫情）为背景，推演一个正能量的平行人生故事。`;
+                const p = `用户遗憾：${user.regret}。出生年柱：${user.date.split('-')[0]}。请创作平行世界故事。`;
+                callAI(sys, p, 'story');
+            };
+
+            const handleGuide = () => {
+                const sys = `你提供改运指南。要求将玄学与科学结合，输出具实际操作性的决策建议。禁止使用违规敏感词。`;
+                callAI(sys, "基于我的生辰，请提供改运决策指南。", 'guide');
+            };
+
+            return (
+                <div className="max-w-6xl mx-auto p-4 py-12">
+                    <header className="text-center mb-16">
+                        <h1 className="text-6xl title-font gold-gradient mb-4">天枢命理专家系统</h1>
+                        <p className="text-gray-500 tracking-widest text-sm uppercase">Destiny Engine • Parallel Universe • Decision Optimization</p>
+                    </header>
+
+                    <div className="grid lg:grid-cols-2 gap-10">
+                        {/* 输入面板 */}
+                        <div className="space-y-8">
+                            <section className="glass p-8 rounded-3xl shadow-2xl">
+                                <h2 className="text-xl font-bold text-yellow-600 mb-6 flex items-center italic">
+                                    <span className="bg-yellow-600 text-black px-2 mr-2 rounded">01</span> 生辰录入与排盘
+                                </h2>
+                                <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
+                                    <div className="col-span-2">
+                                        <label className="text-gray-500 block mb-1">公历生日</label>
+                                        <input type="date" className="w-full bg-black border border-gray-800 p-3 rounded-xl" onChange={e => setUser({...user, date: e.target.value})} />
+                                    </div>
+                                    <div>
+                                        <label className="text-gray-500 block mb-1">出生时辰</label>
+                                        <select className="w-full bg-black border border-gray-800 p-3 rounded-xl" onChange={e => setUser({...user, time: e.target.value})}>
+                                            {["子时","丑时","寅时","卯时","辰时","巳时","午时","未时","申时","酉时","戌时","亥时"].map(s => <option key={s}>{s}</option>)}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="text-gray-500 block mb-1">性别</label>
+                                        <select className="w-full bg-black border border-gray-800 p-3 rounded-xl" onChange={e => setUser({...user, sex: e.target.value})}>
+                                            <option>男</option><option>女</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label className="text-gray-500 block mb-1">出生地点 (支持全球城市)</label>
+                                        <input type="text" placeholder="如：纽约 或 上海" className="w-full bg-black border border-gray-800 p-3 rounded-xl" onChange={e => setUser({...user, loc: e.target.value})} />
+                                    </div>
+                                </div>
+                                <button onClick={handleAnalysis} className="w-full py-4 bg-yellow-600 text-black font-black rounded-2xl hover:bg-yellow-500 transition-all uppercase tracking-widest text-xs">
+                                    {loading ? "正在连接天枢数据库..." : "生成专家级分析报告"}
+                                </button>
+                            </section>
+
+                            <section className="glass p-8 rounded-3xl">
+                                <h2 className="text-xl font-bold text-emerald-500 mb-6 flex items-center italic">
+                                    <span className="bg-emerald-500 text-black px-2 mr-2 rounded">02</span> 平行世界推演
+                                </h2>
+                                <textarea className="w-full bg-black border border-gray-800 p-4 rounded-2xl h-32 outline-none mb-4 text-sm resize-none" placeholder="输入您的人生遗憾事项..." onChange={e => setUser({...user, regret: e.target.value})} />
+                                <button onClick={handleStory} className="w-full py-4 bg-emerald-700 text-white font-bold rounded-2xl hover:bg-emerald-600 transition-all">
+                                    生成平行人生故事
+                                </button>
+                            </section>
+
+                            <button onClick={handleGuide} className="w-full glass py-6 rounded-3xl border border-blue-900 text-blue-400 font-bold hover:bg-blue-900/30 transition shadow-xl">
+                                开启玄学与科学改运指南
+                            </button>
+                        </div>
+
+                        {/* 结果输出面板 */}
+                        <div className="space-y-6">
+                            {res.report && (
+                                <div className="glass p-10 rounded-3xl animate-in slide-in-from-right-10 duration-500">
+                                    <h3 className="text-2xl font-bold gold-gradient mb-8 border-b border-gray-800 pb-4">命理分析全报告</h3>
+                                    <div className="report-section whitespace-pre-wrap text-gray-300 leading-relaxed text-sm">
+                                        {res.report}
+                                    </div>
+                                </div>
+                            )}
+
+                            {res.story && (
+                                <div className="glass p-10 rounded-3xl border-l-4 border-emerald-600 animate-in fade-in duration-1000">
+                                    <h3 className="text-emerald-500 font-bold mb-4">平行世界镜像：</h3>
+                                    <div className="italic text-gray-400 leading-loose text-sm">
+                                        {res.story}
+                                    </div>
+                                </div>
+                            )}
+
+                            {res.guide && (
+                                <div className="glass p-10 rounded-3xl border-dashed border border-blue-500 animate-in zoom-in-95 duration-500">
+                                    <h3 className="text-blue-400 font-bold mb-4">未来决策建议：</h3>
+                                    <div className="text-blue-100/70 text-sm leading-relaxed">
+                                        {res.guide}
+                                    </div>
+                                </div>
+                            )}
+
+                            {!res.report && !loading && (
+                                <div className="h-full flex items-center justify-center opacity-20 flex-col">
+                                    <div className="text-8xl mb-4">☯</div>
+                                    <p className="tracking-widest italic">等待命理推演启动</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <footer className="mt-24 text-center text-[10px] text-gray-700 space-y-2 uppercase tracking-[0.4em]">
+                        <p>TianShu Expert System • Version 3.0 Pro</p>
+                        <p>基于深度命理算法及社会心理学模型 • 2026</p>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
