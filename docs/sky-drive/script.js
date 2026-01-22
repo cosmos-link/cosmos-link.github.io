@@ -1,18 +1,18 @@
 // ==================== 可调整参数 ====================
 const CONFIG = {
-    particleCount: 600,           // 粒子数量
+    particleDensity: 0.0008,      // 粒子密度（每平方像素的粒子数）
     particleSpeedMin: 1.0,        // 粒子最小速度
     particleSpeedMax: 2.5,        // 粒子最大速度（speedMin + 2.0）
     particleSizeMin: 0.5,         // 粒子最小尺寸
-    particleSizeMax: 2.5,         // 粒子最大尺寸（sizeMin + 2.0）
+    particleSizeMax: 1.5,         // 粒子最大尺寸（sizeMin + 2.0）
     particleColor: 'rgba(255, 255, 255',  // 粒子颜色（RGB格式，不含透明度）
     mouseRadius: 150,             // 鼠标影响范围
     mouseForce: 0.02,             // 鼠标推力强度
-    connectionDistance: 120,      // 粒子连线距离
-    connectionOpacity: 0.3,       // 连线最大透明度
+    connectionDistanceRatio: 0.05, // 连线距离比例（相对于屏幕宽度）
+    connectionOpacity: 0.5,       // 连线最大透明度
     connectionColor: 'rgba(102, 126, 234',  // 连线颜色（RGB格式，不含透明度）
     connectionLineWidth: 0.5,     // 连线宽度
-    trailLength: 10,              // 运动轨迹长度
+    trailLength: 5,              // 运动轨迹长度
     trailOpacity: 0.5,            // 轨迹透明度
     trailWidthMultiplier: 0.5,    // 轨迹宽度倍数
     fadeSpeed: 0.1,               // 画面淡出速度（越小拖尾越长）
@@ -34,6 +34,7 @@ const ctx = canvas.getContext('2d');
 let width, height;
 let particles = [];
 let mouse = { x: null, y: null, radius: CONFIG.mouseRadius };
+let dynamicConnectionDistance = 150; // 动态连线距离
 
 // 粒子类
 class Particle {
@@ -135,11 +136,11 @@ function connectParticles() {
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             // 如果距离小于阈值且都在靠近位置，绘制连线
-            if (distance < CONFIG.connectionDistance && 
-                particles[i].z < CONFIG.depthThreshold && 
+            if (distance < dynamicConnectionDistance &&
+                particles[i].z < CONFIG.depthThreshold &&
                 particles[j].z < CONFIG.depthThreshold) {
                 // 根据距离计算透明度（越近越亮）
-                const opacity = (CONFIG.connectionDistance - distance) / CONFIG.connectionDistance * CONFIG.connectionOpacity;
+                const opacity = (dynamicConnectionDistance - distance) / dynamicConnectionDistance * CONFIG.connectionOpacity;
                 ctx.beginPath();
                 ctx.moveTo(particles[i].projectedX, particles[i].projectedY);
                 ctx.lineTo(particles[j].projectedX, particles[j].projectedY);
@@ -157,9 +158,18 @@ function init() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
     
+    // 根据屏幕面积动态计算粒子数量
+    const screenArea = width * height;
+    const particleCount = Math.floor(screenArea * CONFIG.particleDensity);
+    
+    // 根据屏幕宽度动态计算连线距离
+    dynamicConnectionDistance = width * CONFIG.connectionDistanceRatio;
+    
+    console.log(`屏幕尺寸: ${width}x${height}, 粒子数量: ${particleCount}, 连线距离: ${dynamicConnectionDistance.toFixed(0)}`);
+    
     // 创建粒子数组
     particles = [];
-    for (let i = 0; i < CONFIG.particleCount; i++) {
+    for (let i = 0; i < particleCount; i++) {
         particles.push(new Particle());
     }
 }
