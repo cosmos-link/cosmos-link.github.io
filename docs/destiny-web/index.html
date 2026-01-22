@@ -10,14 +10,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
-        body { background: #020617; color: #f1f5f9; font-family: 'Noto Serif SC', serif; overflow-x: hidden; }
-        .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); height: 100%; }
+        body { background: #020617; color: #f1f5f9; font-family: 'Noto Serif SC', serif; scroll-behavior: smooth; }
+        .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
         .bazi-tag { background: #1e293b; border-left: 3px solid #6366f1; }
         .warning-tag { background: rgba(239, 68, 68, 0.05); border-left: 3px solid #ef4444; }
+        .animate-fadeIn { animation: fadeIn 0.8s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .loading-dots:after { content: ' .'; animation: dots 1.5s steps(5, end) infinite;}
         @keyframes dots { 0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); } 40% { color: white; } 60% { text-shadow: .25em 0 0 white; } 80%, 100% { text-shadow: .25em 0 0 white, .5em 0 0 white; } }
-        /* 响应式调整高度 */
-        @media (min-width: 1024px) { .quadrant-height { height: calc(50vh - 80px); } }
     </style>
 </head>
 <body>
@@ -84,106 +84,135 @@
             };
 
             return (
-                <div className="min-h-screen p-4 flex flex-col">
-                    <header className="text-center mb-6">
-                        <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">命运之书 Pro</h1>
+                <div className="min-h-screen p-4 flex flex-col items-center">
+                    <header className="text-center my-8">
+                        <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent mb-2">命运之书 Pro</h1>
+                        <p className="text-slate-500 text-sm italic italic">—— 探寻命理轨迹，缝补人生遗憾 ——</p>
                     </header>
 
-                    <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto w-full">
+                    <div className="w-full max-w-7xl space-y-6">
                         
-                        {/* 1. 左上：生辰输入 */}
-                        <div className="quadrant-height">
-                            <section className="glass-card p-6 rounded-3xl flex flex-col justify-center">
-                                <h3 className="text-indigo-400 font-bold mb-4 flex items-center">
-                                    <span className="mr-2">❶</span> 生辰起卦
+                        {/* 上排：输入区 */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {/* 左上：生辰输入 */}
+                            <section className="glass-card p-8 rounded-3xl min-h-[280px] flex flex-col justify-center">
+                                <h3 className="text-indigo-400 font-bold mb-6 flex items-center">
+                                    <span className="w-6 h-6 rounded-full border border-indigo-400 flex items-center justify-center text-xs mr-2">1</span>
+                                    设定生辰原点
                                 </h3>
                                 <div className="space-y-4">
                                     <div className="grid grid-cols-2 gap-4">
-                                        <input type="date" className="bg-slate-900 border border-slate-700 p-3 rounded-xl outline-none text-sm" onChange={e => setBirthDate(e.target.value)} />
-                                        <select className="bg-slate-900 border border-slate-700 p-3 rounded-xl outline-none text-sm" onChange={e => setBirthTime(e.target.value)}>
-                                            {["子时","丑时","寅时","卯时","辰时","巳时","午时","未时","申时","酉时","戌时","亥时"].map(s => <option key={s}>{s}</option>)}
-                                        </select>
+                                        <div className="space-y-1">
+                                            <label className="text-[10px] text-slate-500 ml-1">出生日期</label>
+                                            <input type="date" className="w-full bg-slate-900 border border-slate-700 p-3 rounded-xl outline-none text-sm" onChange={e => setBirthDate(e.target.value)} />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-[10px] text-slate-500 ml-1">出生时辰</label>
+                                            <select className="w-full bg-slate-900 border border-slate-700 p-3 rounded-xl outline-none text-sm" onChange={e => setBirthTime(e.target.value)}>
+                                                {["子时","丑时","寅时","卯时","辰时","巳时","午时","未时","申时","酉时","戌时","亥时"].map(s => <option key={s}>{s}</option>)}
+                                            </select>
+                                        </div>
                                     </div>
-                                    <button onClick={calculateFate} className="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-xl font-bold transition">推演命运轨迹</button>
+                                    <button onClick={calculateFate} className="w-full bg-indigo-600 hover:bg-indigo-500 py-3 mt-2 rounded-xl font-bold transition-all active:scale-[0.98] shadow-lg shadow-indigo-900/30">
+                                        推演命运轨迹
+                                    </button>
                                 </div>
                             </section>
-                        </div>
 
-                        {/* 2. 右上：遗憾输入 */}
-                        <div className="quadrant-height text-right">
-                            <section className="glass-card p-6 rounded-3xl flex flex-col justify-center">
-                                <h3 className="text-emerald-400 font-bold mb-4 flex items-center justify-end">
-                                    遗憾记叙 <span className="ml-2">❷</span>
+                            {/* 右上：遗憾输入 */}
+                            <section className="glass-card p-8 rounded-3xl min-h-[280px] flex flex-col justify-center">
+                                <h3 className="text-emerald-400 font-bold mb-6 flex items-center">
+                                    <span className="w-6 h-6 rounded-full border border-emerald-400 flex items-center justify-center text-xs mr-2">2</span>
+                                    记叙心中遗憾
                                 </h3>
-                                <textarea className="w-full bg-slate-900 border border-slate-700 p-4 rounded-xl h-24 outline-none mb-3 text-sm resize-none" placeholder="描述那件让你遗憾的事..." value={regret} onChange={e => setRegret(e.target.value)} />
-                                <button onClick={callDeepSeek} disabled={isLoading} className="w-full bg-gradient-to-r from-emerald-600 to-indigo-600 py-3 rounded-xl font-bold transition">
-                                    {isLoading ? <span className="loading-dots">AI 正在重写时空</span> : "启动平行时空续写"}
+                                <textarea
+                                    className="w-full bg-slate-900 border border-slate-700 p-4 rounded-xl h-24 outline-none mb-4 text-sm resize-none focus:border-emerald-500 transition-colors"
+                                    placeholder="如果我2023年没有和女友分手会发生什么？或者输入其他让你遗憾的事..."
+                                    value={regret}
+                                    onChange={e => setRegret(e.target.value)}
+                                />
+                                <button
+                                    onClick={callDeepSeek}
+                                    disabled={isLoading}
+                                    className={`w-full py-3 rounded-xl font-bold transition-all active:scale-[0.98] shadow-lg ${isLoading ? 'bg-slate-700' : 'bg-gradient-to-r from-emerald-600 to-indigo-600 hover:opacity-90'}`}
+                                >
+                                    {isLoading ? <span className="loading-dots">AI 正在重写平行时空</span> : "启动平行时空续写"}
                                 </button>
                             </section>
                         </div>
 
-                        {/* 3. 左下：命理结果 */}
-                        <div className="quadrant-height">
-                            <section className="glass-card p-6 rounded-3xl overflow-hidden flex flex-col">
-                                <h3 className="text-indigo-300 font-bold mb-3 border-b border-slate-800 pb-2 flex justify-between items-center">
-                                    <span>❸ 大运与流年</span>
-                                    <span className="text-[10px] text-slate-500 font-normal">FUTURE PATH</span>
-                                </h3>
-                                <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scroll">
-                                    {fateData ? (
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="space-y-2">
-                                                <p className="text-[10px] text-indigo-500 font-bold">十年大运(宜)</p>
+                        {/* 下排：结果区（动态显示） */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                            
+                            {/* 左下：命理结果 */}
+                            <div className={fateData ? "animate-fadeIn" : "hidden"}>
+                                <section className="glass-card p-8 rounded-3xl h-full">
+                                    <h3 className="text-indigo-300 font-bold mb-6 border-b border-slate-800 pb-3 flex justify-between items-center">
+                                        <span>大运与流年排盘</span>
+                                        <span className="text-[10px] text-slate-500 font-normal">CHART ANALYSIS</span>
+                                    </h3>
+                                    {fateData && (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="space-y-3">
+                                                <p className="text-xs text-indigo-500 font-bold uppercase tracking-wider mb-2">十年大运 (宜行)</p>
                                                 {fateData.dayun.map((d, i) => (
-                                                    <div key={i} className="bazi-tag p-2 rounded text-[11px]">
-                                                        <div className="text-indigo-400 font-bold">{d.period}</div>
-                                                        <div className="text-slate-300">{d.theme}</div>
-                                                        <div className="text-emerald-500 italic">{d.suit}</div>
+                                                    <div key={i} className="bazi-tag p-3 rounded-xl">
+                                                        <div className="flex justify-between text-[10px] text-indigo-400 font-bold">
+                                                            <span>{d.period}</span>
+                                                            <span>{d.age}</span>
+                                                        </div>
+                                                        <div className="text-sm font-bold text-slate-200 my-1">{d.theme}</div>
+                                                        <div className="text-xs text-emerald-500 italic">✓ {d.suit}</div>
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="space-y-2">
-                                                <p className="text-[10px] text-red-500 font-bold">流年禁忌(忌)</p>
+                                            <div className="space-y-3">
+                                                <p className="text-xs text-red-500 font-bold uppercase tracking-wider mb-2">流年往复 (禁忌)</p>
                                                 {fateData.liunian.map((l, i) => (
-                                                    <div key={i} className="warning-tag p-2 rounded text-[11px]">
-                                                        <div className="text-red-400 font-bold">{l.year} {l.name}</div>
-                                                        <div className="text-red-200">{l.taboo}</div>
+                                                    <div key={i} className="warning-tag p-3 rounded-xl">
+                                                        <div className="flex justify-between text-[10px] text-red-400 font-bold">
+                                                            <span>{l.year}年</span>
+                                                            <span>{l.name}年</span>
+                                                        </div>
+                                                        <div className="text-sm text-red-200 mt-1">✗ {l.taboo}</div>
                                                     </div>
                                                 ))}
                                             </div>
                                         </div>
-                                    ) : (
-                                        <div className="h-full flex items-center justify-center text-slate-700 text-sm italic">等待生辰数据输入...</div>
                                     )}
-                                </div>
-                            </section>
-                        </div>
+                                </section>
+                            </div>
 
-                        {/* 4. 右下：续写结果 */}
-                        <div className="quadrant-height">
-                            <section className="glass-card p-6 rounded-3xl border-t-2 border-emerald-500/50 flex flex-col">
-                                <h3 className="text-emerald-400 font-bold mb-3 border-b border-slate-800 pb-2 flex justify-between items-center">
-                                    <span>❹ 治愈之书</span>
-                                    <span className="text-[10px] text-slate-500 font-normal">HEALING STORY</span>
-                                </h3>
-                                <div className="flex-1 overflow-y-auto pr-2 custom-scroll">
+                            {/* 右下：续写结果 */}
+                            <div className={aiStory || isLoading ? "animate-fadeIn" : "hidden"}>
+                                <section className="glass-card p-8 rounded-3xl border-t-2 border-emerald-500/50 h-full">
+                                    <h3 className="text-emerald-400 font-bold mb-6 border-b border-slate-800 pb-3 flex justify-between items-center">
+                                        <span>平行时空的信件</span>
+                                        <span className="text-[10px] text-slate-500 font-normal">HEALING STORY</span>
+                                    </h3>
                                     {aiStory ? (
-                                        <p className="text-slate-300 leading-relaxed italic text-sm whitespace-pre-wrap animate-fade-in pb-4">
-                                            {aiStory}
-                                        </p>
+                                        <div className="space-y-4">
+                                            <p className="text-slate-300 leading-relaxed italic text-base whitespace-pre-wrap">
+                                                {aiStory}
+                                            </p>
+                                            <div className="pt-6 border-t border-slate-800 flex justify-between items-center">
+                                                <span className="text-[10px] text-slate-600 uppercase tracking-tighter">Generated by DeepSeek AI</span>
+                                                <span className="text-emerald-500 font-bold text-sm tracking-widest">— 活在当下，即是新生 —</span>
+                                            </div>
+                                        </div>
                                     ) : (
-                                        <div className="h-full flex items-center justify-center text-slate-700 text-sm italic text-center">
-                                            {isLoading ? "正在为您检索平行时空的另一种可能..." : "在右上方输入遗憾，开启治愈之旅"}
+                                        <div className="py-20 text-center">
+                                            <span className="loading-dots text-slate-500">正在为您检索另一种可能</span>
                                         </div>
                                     )}
-                                </div>
-                            </section>
-                        </div>
+                                </section>
+                            </div>
 
+                        </div>
                     </div>
 
-                    <footer className="text-center py-4 text-slate-700 text-[10px] tracking-widest uppercase">
-                        The Book of Destiny © 2026 | Professional Edition
+                    <footer className="mt-20 mb-8 text-center text-slate-700 text-[10px] tracking-[0.3em] uppercase">
+                        The Book of Destiny © 2026 | All Stories Rewrite by AI
                     </footer>
                 </div>
             );
